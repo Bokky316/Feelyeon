@@ -1,52 +1,27 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org" lang="ko" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Shop</title>
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css">
-</head>
-<body>
-<div th:fragment="header">
-  <nav class="navbar navbar-expand-lg bg-primary">
-    <div class="container-fluid">
-      <a class="navbar-brand text-white" href="http://localhost:8080/">Shop</a>
-      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-        <span class="navbar-toggler-icon"></span>
-      </button>
-      <div class="collapse navbar-collapse" id="navbarSupportedContent">
-        <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-          <li class="nav-item" sec:authorize="hasAnyAuthority('ROLE_ADMIN')">
-            <a class="nav-link active" th:href="@{/admin/item/new}">상품등록</a>
-          </li>
-          <li class="nav-item" sec:authorize="hasAnyAuthority('ROLE_ADMIN')">
-            <a class="nav-link active" th:href="@{/admin/items}">상품관리</a>
-          </li>
-          <li class="nav-item" sec:authorize="isAuthenticated()">
-            <a class="nav-link active" th:href="@{/cart}">장바구니</a>
-          </li>
-          <li class="nav-item" sec:authorize="isAuthenticated()">
-            <a class="nav-link active" th:href="@{/orders}">구매이력</a>
-          </li>
-          <li class="nav-item" sec:authorize="isAnonymous()">
-            <a class="nav-link active" th:href="@{/members/login}">로그인</a>
-          </li>
-          <li class="nav-item" sec:authorize="isAuthenticated()">
-            <a class="nav-link active" th:href="@{/members/logout}">로그아웃</a>
-          </li>
-        </ul>
-        <div class="d-flex align-items-center">
-          <form class="d-flex me-2" role="search">
-            <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
-            <button class="btn btn-outline-light" type="submit">Search</button>
-          </form>
-          <a class="btn btn-outline-light" th:href="@{/members/new}" sec:authorize="isAnonymous()"
-             onclick="alert('회원가입 후 로그인 페이지로 이동합니다.')">회원가입</a>
+<html xmlns:th="http://www.thymeleaf.org">
+<header>
+    <div class="event-area">
+        <div class="container">
+            <div class="text" id="text1">손 끝에서 시작되는, 당신의 인연</div>
+            <div class="text" id="text2">2025년 새해 복 많이 받으세요.</div>
         </div>
-      </div>
     </div>
-  </nav>
-</div>
-</body>
-</html>
+    <nav>
+        <div class="categories" id="menuToggle"><i class="fas fa-bars"></i></div>
+        <div class="side-menu" id="sideMenu">
+            <ul>
+                <li>Home</li>
+                <li>About</li>
+                <li>Services</li>
+                <li>Contact</li>
+            </ul>
+        </div>
+        <a href="main.html" class="logo"><img th:src="@{/static-images/logo_bl.png}" alt="logo"></a>
+        <div class="nav header-btns">
+            <a href="#">SIGN UP</a>
+            <a href="#">LOGIN</a>
+            <a href="#">CART</a>
+        </div>
+    </nav>
+</header>

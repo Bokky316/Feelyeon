@@ -1,92 +1,249 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org"
-      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-      layout:decorate="~{layouts/layout1}">
-
-<!-- 사용자 CSS 추가 -->
-<th:block layout:fragment="css">
-    <link rel="stylesheet" href="/css/main.css">
-</th:block>
-
-<div layout:fragment="content">
-<!--
-<div id="carouselControls" class="carousel slide margin" data-ride="carousel">
-        <div class="carousel-inner">
-            <div class="carousel-item active item">
-                <img class="d-block w-100 banner" src="https://user-images.githubusercontent.com/13268420/112147492-1ab76200-8c20-11eb-8649-3d2f282c3c02.png" alt="First slide">
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>필연 : 必然</title>
+    <th:block layout:fragment="css">
+    <link href="css/index.css" rel="stylesheet">
+    <link href="css/header.css" rel="stylesheet">
+    <link href="css/footer.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Nanum+Gothic&family=Playfair+Display:ital,wght@0,400..900;1,400..900&display=swap" rel="stylesheet">
+    </th:block>
+</head>
+<body>
+    <!-- header html 분리 필요, css 분리 완료  -->
+    <header>
+        <div class="event-area">
+            <div class="container">
+                <div class="text" id="text1">손 끝에서 시작되는, 당신의 인연</div>
+                <div class="text" id="text2">2025년 새해 복 많이 받으세요.</div>
             </div>
         </div>
-    </div>
--->
+        <nav>
+            <div class="categories" id="menuToggle"><i class="fas fa-bars"></i></div>
+            <div class="side-menu" id="sideMenu">
+                <ul>
+                    <li>Home</li>
+                    <li>About</li>
+                    <li>Services</li>
+                    <li>Contact</li>
+                </ul>
+            </div>
+            <a href="main.html" class="logo"><img th:src="@{/static-images/logo_bl.png}" alt="logo"></a>
+            <div class="nav header-btns">
+                <a href="#">SIGN UP</a>
+                <a href="#">LOGIN</a>
+                <a href="cart/cart.html">CART</a>
+            </div>
+        </nav>
+    </header>
+    <!-- end of header -->
+
+    <!-- ===========================================
+                    메인 컨텐츠 시작
+            해당 html은 vs code로 작업했기 때문에
+            데이터 부분은 이후 intelliJ로 옮기면서
+            수정해야함.
+         ===========================================
+    -->
+    <!-- banner -->
     <div id="carouselControls" class="carousel slide margin" data-ride="carousel">
-        <div class="carousel-inner">
-            <!-- 첫 번째 배너 이미지 -->
-            <div class="carousel-item active item">
-                <img class="d-block w-100 banner" th:src="@{/static-images/banner_1.jpg}" alt="First slide">
-            </div>
-            <!-- 두 번째 배너 이미지 -->
-            <div class="carousel-item item">
-                <img class="d-block w-100 banner" th:src="@{/static-images/banner_2.jpg}" alt="Second slide">
-            </div>
-            <!-- 세 번째 배너 이미지 -->
-            <div class="carousel-item item">
-                <img class="d-block w-100 banner" th:src="@{/static-images/banner_3.jpg}" alt="Second slide">
-            </div>
+    <div class="slider-container">
+        <div class="slider">
+            <div class="slide"><img th:src="@{/static-images/image1.jpg}" alt="Image 1"></div>
+            <div class="slide"><img th:src="@{/static-images/image2.jpg}" alt="Image 2"></div>
+            <div class="slide"><img th:src="@{/static-images/image3.jpg}" alt="Image 3"></div>
+            <div class="slide"><img th:src="@{/static-images/image4.jpg}" alt="Image 4"></div>
         </div>
-        <!-- 좌우 화살표 추가 -->
-        <a class="carousel-control-prev" href="#carouselControls" role="button" data-slide="prev">
-            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-            <span class="sr-only">Previous</span>
-        </a>
-        <a class="carousel-control-next" href="#carouselControls" role="button" data-slide="next">
-            <span class="carousel-control-next-icon" aria-hidden="true"></span>
-            <span class="sr-only">Next</span>
-        </a>
+        <div class="indicator-container">
+            <div class="indicator"></div>
+            <div class="indicator"></div>
+            <div class="indicator"></div>
+            <div class="indicator"></div>
+        </div>
     </div>
-
-
-    <input type="hidden" name="searchQuery" th:value="${itemSearchDto.searchQuery}">
-    <div th:if="${not #strings.isEmpty(itemSearchDto.searchQuery)}" class="center">
-        <p class="h3 font-weight-bold" th:text="${itemSearchDto.searchQuery} + '검색 결과'"></p>
     </div>
-
-    <div class="row">
-        <th:block th:each="item, status: ${items.getContent()}">
-            <div class="col-md-4 margin">
-                <div class="card">
-                    <a th:href="'/item/' +${item.id}" class="text-dark">
-                        <img th:src="${item.imgUrl}" class="card-img-top" th:alt="${item.itemNm}" height="400">
-                        <div class="card-body">
-                            <h4 class="card-title">[[${item.itemNm}]]</h4>
-                            <p class="card-text">[[${item.itemDetail}]]</p>
-                            <h3 class="card-title text-danger">[[${item.price}]]원</h3>
-                        </div>
-                    </a>
+    <div class="products-container">
+        <h2>PRODUCTS</h2>
+    
+        <!-- 첫 번째 줄 -->
+        <div class="products-section section1">
+            <div class="item product1">
+                <a href="/상품상세페이지">
+                    <img th:src="@{/static-images/product/011.png}">
+                    <div class="view-button"><i class="fas fa-search"></i> VIEW DETAILS</div>
+                </a>
+                <div class="product-info">
+                    <h3 class="product-name">애니멀 연필깎이 - 코끼리<br>Animal Sharpener Rice Resin - Elephant</h3>
+                    <p class="product-price">5,500원</p>
                 </div>
             </div>
-        </th:block>
-    </div>
-
-    <div th:with="start=${(items.number/maxPage)*maxPage + 1}, end=(${(items.totalPages == 0) ? 1 : (start + (maxPage - 1) < items.totalPages ? start + (maxPage - 1) : items.totalPages)})" >
-        <ul class="pagination justify-content-center">
-
-            <li class="page-item" th:classappend="${items.number eq 0}?'disabled':''">
-                <a th:href="@{'/' + '?searchQuery=' + ${itemSearchDto.searchQuery} + '&page=' + ${items.number-1}}" aria-label='Previous' class="page-link">
-                    <span aria-hidden='true'>Previous</span>
+    
+            <div class="item product2">
+                <a href="/상품상세페이지">
+                    <img th:src="@{/static-images/product/013.png}">
+                    <div class="view-button"><i class="fas fa-search"></i> VIEW DETAILS</div>
                 </a>
-            </li>
-
-            <li class="page-item" th:each="page: ${#numbers.sequence(start, end)}" th:classappend="${items.number eq page-1}?'active':''">
-                <a th:href="@{'/' +'?searchQuery=' + ${itemSearchDto.searchQuery} + '&page=' + ${page-1}}" th:inline="text" class="page-link">[[${page}]]</a>
-            </li>
-
-            <li class="page-item" th:classappend="${items.number+1 ge items.totalPages}?'disabled':''">
-                <a th:href="@{'/' +'?searchQuery=' + ${itemSearchDto.searchQuery} + '&page=' + ${items.number+1}}" aria-label='Next' class="page-link">
-                    <span aria-hidden='true'>Next</span>
+                <div class="product-info">
+                    <h3 class="product-name">Pencil Eraser Caps<br><br></h3>
+                    <p class="product-price">4,000원</p>
+                </div>
+            </div>
+    
+            <div class="item product3">
+                <a href="/상품상세페이지">
+                    <img th:src="@{/static-images/product/014.png}">
+                    <div class="view-button"><i class="fas fa-search"></i> VIEW DETAILS</div>
                 </a>
-            </li>
-
-        </ul>
+                <div class="product-info">
+                    <h3 class="product-name">Carl Angel-5 Royal 3 Pencil Sharpener<br><br></h3>
+                    <p class="product-price">75,000원</p>
+                </div>
+            </div>
+    
+            <div class="item product4">
+                <a href="/상품상세페이지">
+                    <img th:src="@{/static-images/product/004.png}">
+                    <div class="view-button"><i class="fas fa-search"></i> VIEW DETAILS</div>
+                </a>
+                <div class="product-info">
+                    <h3 class="product-name">블랙윙 연필<br>Blackwing Vol.574</h3>
+                    <p class="product-price">56,000원</p>
+                </div>
+            </div>
+    
+            <div class="item product5">
+                <a href="/상품상세페이지">
+                    <img th:src="@{/static-images/product/012.png}">
+                    <div class="view-button"><i class="fas fa-search"></i> VIEW DETAILS</div>
+                </a>
+                <div class="product-info">
+                    <h3 class="product-name">CARAN D’ACHE SWISS WOOD<br><br></h3>
+                    <p class="product-price">7,000원</p>
+                </div>
+            </div>
+        </div>
+    
+        <!-- 두 번째 줄 -->
+        <div class="products-section section2">
+            <div class="item product6">
+                <a href="/상품상세페이지">
+                    <img th:src="@{/static-images/product/015.png}">
+                    <div class="view-button"><i class="fas fa-search"></i> VIEW DETAILS</div>
+                </a>
+                <div class="product-info">
+                    <h3 class="product-name">체크리스트 메모지+미니연필<br><br></h3>
+                    <p class="product-price">3,000원</p>
+                </div>
+            </div>
+    
+            <div class="item product7">
+                <a href="/상품상세페이지">
+                    <img th:src="@{/static-images/product/007.png}">
+                    <div class="view-button"><i class="fas fa-search"></i> VIEW DETAILS</div>
+                </a>
+                <div class="product-info">
+                    <h3 class="product-name">스노우 글로브 120mm<br>Snowglobe 120mm - Scene</h3>
+                    <p class="product-price">79,000원</p>
+                </div>
+            </div>
+    
+            <div class="item product8">
+                <a href="/상품상세페이지">
+                    <img th:src="@{/static-images/product/008.png}">
+                    <div class="view-button"><i class="fas fa-search"></i> VIEW DETAILS</div>
+                </a>
+                <div class="product-info">
+                    <h3 class="product-name">Writing Desk Box Ver.2<br><br></h3>
+                    <p class="product-price">155,000원</p>
+                </div>
+            </div>
+    
+            <div class="item product9">
+                <a href="/상품상세페이지">
+                    <img th:src="@{/static-images/product/009.png}">
+                    <div class="view-button"><i class="fas fa-search"></i> VIEW DETAILS</div>
+                </a>
+                <div class="product-info">
+                    <h3 class="product-name">인스피레이션 스탬프<br>Inspiration Stamp</h3>
+                    <p class="product-price">4,500원</p>
+                </div>
+            </div>
+    
+            <div class="item product10">
+                <a href="/상품상세페이지">
+                    <img th:src="@{/static-images/product/010.png}">
+                    <div class="view-button"><i class="fas fa-search"></i> VIEW DETAILS</div>
+                </a>
+                <div class="product-info">
+                    <h3 class="product-name">라디오미터<br>Radiometer Short 60mm</h3>
+                    <p class="product-price">79,000원</p>
+                </div>
+            </div>
+        </div>
     </div>
+    
 
-</div>
+    <!-- footer 추후 html 분리 필요, css 분리 완료 -->
+    <footer>
+        <p>
+            &copy; 2024 feelyeon. All rights reserved.<br>
+            상호 ㈜ 필연<br>
+            대표 장보키<br>
+            사업자 등록번호 123-45-6789<br>
+            주소 15494 경기 안산시 상록구 광덕1로 375 강우프라자 5층 이젠컴퓨터아카데미<br>
+            대표전화 010-1234-5678<br>
+            통신판매업 신고 2024-경기안산-01234<br>
+            이메일 feelyeon@ezkb.co.kr<br>
+            COPYRIGHT © 필연 ALL RIGHTS RESERVED. DESIGNED By YUNI
+        </p>
+    </footer>
+
+    <script>
+        // =============== [ 공통 스크립트 ] ===============
+        //    1. 상단 메뉴 버튼
+        // =================================================
+        document.addEventListener("DOMContentLoaded", function () {
+            // header script
+            // menu slider
+            const sideMenu = document.getElementById('sideMenu');
+            const menuToggle = document.getElementById('menuToggle');
+
+            function toggleMenu() {
+                sideMenu.classList.toggle('open');
+            }
+
+            menuToggle.addEventListener('click', toggleMenu);
+
+            document.addEventListener('click', function(event) {
+                if (!sideMenu.contains(event.target) && !menuToggle.contains(event.target)) {
+                    sideMenu.classList.remove('open');
+                }
+            });
+            
+            // banner script
+            // slide and indicator
+            let currentIndex = 0;
+            const slides = document.querySelectorAll('.slide');
+            const indicators = document.querySelectorAll('.indicator');
+            const slider = document.querySelector('.slider');
+
+            function changeSlide() {
+                slider.style.transform = `translateX(-${100 * currentIndex}vw)`;
+
+                indicators.forEach(indicator => indicator.classList.remove('active'));
+                indicators[currentIndex].classList.add('active');
+
+                currentIndex = (currentIndex + 1) % slides.length;
+            }
+
+            setInterval(() => {
+                changeSlide();
+            }, 4000);
+
+            changeSlide();
+        });
+    </script>
+</body>

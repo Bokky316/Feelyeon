@@ -1,0 +1,171 @@
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    width: 100%;
+    background-color: #FAF6ED;
+}
+
+.review-banner {
+    text-align: center;
+    padding: 50px 0;
+    margin-top: 80px;
+}
+
+.review-banner h2 {
+    font-size: 3em;
+    margin: 0;
+    font-family: "Playfair Display", serif;
+}
+
+/* 리뷰 작성 폼 */
+.review-form-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    padding: 20px;
+}
+
+/* 상품 정보 */
+.product-info {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    width: 100%;
+    font-family: "Nanum Gothic", serif;
+}
+
+.description {
+    padding-bottom: 15px;
+    border-bottom: 1px solid #ccc;
+}
+
+.detail-info {
+    display: flex;
+    align-items: center;
+    width: 100%;
+    padding: 10px 5px;
+}
+
+.detail-info a {
+    text-decoration: none;
+    color: black;
+    width: 100%;
+    display: flex;
+    align-items: flex-start;
+}
+
+.detail-info a img {
+    width: 80px;
+    height: 100px;
+    object-fit: cover;
+    margin-right: 20px;
+}
+
+.product-name, .price {
+    margin: 0;
+}
+
+.detail-info .product-name {
+    font-weight: bold;
+    padding-bottom: 10px;
+}
+
+.review-form {
+    background-color: #fff;
+    padding: 30px;
+    border-radius: 8px;
+    width: 80%;
+    max-width: 600px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+/* 만족도 */
+.rating-container {
+    margin-top: 20px;
+}
+
+.rating-container p {
+    margin-bottom: 10px;
+}
+
+.star-rating {
+    display: flex;
+    justify-content: flex-start;
+    gap: 8px;
+    font-size: 1.5em;
+}
+
+.star {
+    cursor: pointer;
+    color: red;
+    transition: color 0.3s;
+}
+
+.star.filled {
+    color: red;
+}
+
+#rating-text {
+    margin-top: 7px;
+    margin-bottom: 3px;
+    font-size: 16px;
+    color: #333;
+}
+
+/* 리뷰 작성란 */
+.input-container {
+    display: flex;
+    flex-direction: column;
+}
+
+.review-label {
+    margin-top: 20px;
+    margin-bottom: 20px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid #ccc;
+}
+
+.input-container p {
+    color: red;
+    font-size: 14px;
+    padding-bottom: 20px;
+}
+
+#review-text {
+    padding: 10px;
+}
+
+/* 버튼 디자인 */
+.btn-wrap {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+}
+
+.submit-button {
+    background-color: black;
+    color: #fff;
+    font-size: 15px;
+    border: none;
+    cursor: pointer;
+    width: 120px;
+    height: 40px;
+}
+
+.cancel-button {
+    cursor: pointer;
+    background-color: white;
+    font-size: 15px;
+    width: 90px;
+    height: 40px;
+    border: 1px solid black;
+}
+
+footer {
+    font-size: 14px;
+    color: #454545;
+    margin-top: 200px;
+    margin-left: 120px;
+    padding-bottom: 50px;
+}
