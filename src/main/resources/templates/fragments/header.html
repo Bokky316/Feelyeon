@@ -33,6 +33,14 @@
               <a class="nav-link active" aria-current="page" th:href="@{/members/logout}">로그아웃</a>
             </li>
           </ul>
+          <div class="d-flex align-items-center">
+            <form class="d-flex me-2" role="search">
+              <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
+              <button class="btn btn-outline-light" type="submit">Search</button>
+            </form>
+            <a class="btn btn-outline-light me-5" th:href="@{/members/new}" sec:authorize="isAnonymous()"
+               onclick="alert('회원가입 후 로그인 페이지로 이동합니다.')">회원가입</a>
+          </div>
           <form class="d-flex ml-auto" role="search">
             <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
             <button class="btn btn-outline-light" type="submit">Search</button>
