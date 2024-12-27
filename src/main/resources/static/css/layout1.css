@@ -14,7 +14,7 @@ body {
 
 .content {
     flex: 1; /* 본문 영역이 남은 공간을 모두 차지하도록 설정 */
-    margin: 50px 200px 100px 200px; /* 여백 추가 */
+    margin: 150px 200px 100px 200px; /* 여백 추가 */
 }
 
 .footer {
