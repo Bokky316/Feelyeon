@@ -27,11 +27,11 @@ import org.springframework.web.bind.annotation.ResponseBody;
 @Controller
 @RequestMapping("/members")
 @RequiredArgsConstructor
-@Log4j2 // 로그를 사용하기 위한 어노테이션, log.info() 사용가능
+@Log4j2
 public class MemberController {
 
     private final MemberService memberService;
-    private final PasswordEncoder passwordEncoder;  // 비밀번호 암복호화
+    private final PasswordEncoder passwordEncoder;
 
     /**
      * 회원가입 폼
@@ -73,12 +73,14 @@ public class MemberController {
             model.addAttribute("errorMessage", e.getMessage());
             return "members/memberForm";
         }
-        return "redirect:/";    // 회원가입 성공시 메인페이지로 이동
+        // 회원가입 성공 후 로그인 페이지로 리디렉션
+        return "redirect:/members/login";    // 로그인 페이지로 이동
     }
 
     /**
      * 로그인 화면 오픈 메소드
-     * @return
+     * - 로그인 페이지를 제공하는 컨트롤러
+     * @return 로그인 폼 페이지
      */
     @GetMapping("/login")
     public String loginMember(Model model){
@@ -89,8 +91,9 @@ public class MemberController {
 
     /**
      * 로그인 실패시 오류 메시지를 전달하는 메소드
-     * @param model
-     * @return
+     * - 로그인 실패 시 오류 메시지를 표시하는 컨트롤러
+     * @param model 오류 메시지를 전달하는 모델 객체
+     * @return 로그인 폼 페이지
      */
     @GetMapping("/login/error")
     public String loginError(Model model){
@@ -100,12 +103,12 @@ public class MemberController {
 
     /**
      * 로그아웃 성공시 메인페이지로 이동
+     * - 로그아웃을 처리하는 컨트롤러
      */
     @GetMapping("/logout")
     public String performLogout(HttpServletRequest request,
                                 HttpServletResponse response) {
         // 1. 현재 로그인한 사용자 정보를 시큐리티 컨텍스트 홀더에서 가져옴
-        // org.springframework.security.core.Authentication;
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         // 2. 로그인한 사용자 정보가 있다면 로그아웃 처리
         if(authentication != null){
@@ -118,6 +121,7 @@ public class MemberController {
 
     /**
      * 파비콘 요청 무시
+     * - 파비콘 요청을 무시하는 메소드
      */
     @GetMapping("/favicon.ico")
     @ResponseBody
@@ -126,3 +130,4 @@ public class MemberController {
     }
 
 }
+
