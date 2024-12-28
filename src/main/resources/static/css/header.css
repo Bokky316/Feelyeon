@@ -38,6 +38,7 @@
     animation-delay: 5s;
 }
 
+/* 최상단 텍스트 애니메이션 효과 */
 @keyframes slideUpFadeInOut {
     0% {
         opacity: 0;
@@ -73,6 +74,7 @@ nav {
     left: 0;
     right: 0;
     z-index: 999;
+    height: 35px;
 }
 
 /* 좌측 메뉴 슬라이드 스타일 */
@@ -112,6 +114,12 @@ nav {
     margin: 15px 0;
 }
 
+.side-menu ul li a {
+    text-decoration: none;
+    color: #FAF6ED;
+    margin-left: 15px;
+}
+
 .side-menu.open {
     transform: translateX(250px);
     z-index: 1000;
@@ -120,6 +128,7 @@ nav {
 .nav a {
     color: white;
     text-decoration: none;
+    cursor: pointer;
 }
 
 nav .logo {

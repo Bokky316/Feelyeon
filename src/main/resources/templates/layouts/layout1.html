@@ -13,8 +13,6 @@
   <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
   <!-- Global css 즉, 전역으로 사용할 css 파일을 추가합니다. -->
   <link th:href="@{/css/layout1.css}" rel="stylesheet">
-  <link th:href="@{/css/header.css}" rel="stylesheet">
-  <link th:href="@{/css/header_bg.css}" rel="stylesheet">
   <link th:href="@{/css/footer.css}" rel="stylesheet">
 
   <!-- JS, Popper.js, and jQuery -->
@@ -35,6 +33,7 @@
          6. 뒤의 header : header.html에 정의되어 있는 프레그먼트 이름입니다.
   -->
   <div th:replace="~{fragments/header::header}"></div>
+  <div th:replace="~{fragments/header_bg::header_bg}"></div>
 
   <!-- 컨텐트 페이지에서 정의한 컨텐트 영역을 삽입할 블록 -->
   <!--   1. layout:fragment 속성을 사용하면 레이아웃 템플릿에 정의된 블록에 컨텐트를 삽입할 수 있습니다.

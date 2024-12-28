@@ -5,47 +5,20 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>필연 : 必然</title>
     <th:block layout:fragment="css">
-    <link href="css/index.css" rel="stylesheet">
-    <link href="css/header.css" rel="stylesheet">
-    <link href="css/footer.css" rel="stylesheet">
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Nanum+Gothic&family=Playfair+Display:ital,wght@0,400..900;1,400..900&display=swap" rel="stylesheet">
+        <link href="css/index.css" rel="stylesheet">
+        <link href="css/header.css" rel="stylesheet">
+        <link href="css/footer.css" rel="stylesheet">
+        <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+        <link href="https://fonts.googleapis.com/css2?family=Nanum+Gothic&family=Playfair+Display:ital,wght@0,400..900;1,400..900&display=swap" rel="stylesheet">
     </th:block>
 </head>
 <body>
-    <!-- header html 분리 필요, css 분리 완료  -->
-    <header>
-        <div class="event-area">
-            <div class="container">
-                <div class="text" id="text1">손 끝에서 시작되는, 당신의 인연</div>
-                <div class="text" id="text2">2025년 새해 복 많이 받으세요.</div>
-            </div>
-        </div>
-        <nav>
-            <div class="categories" id="menuToggle"><i class="fas fa-bars"></i></div>
-            <div class="side-menu" id="sideMenu">
-                <ul>
-                    <li>Home</li>
-                    <li>About</li>
-                    <li>Services</li>
-                    <li>Contact</li>
-                </ul>
-            </div>
-            <a href="main.html" class="logo"><img th:src="@{/static-images/logo_bl.png}" alt="logo"></a>
-            <div class="nav header-btns">
-                <a href="#">SIGN UP</a>
-                <a href="#">LOGIN</a>
-                <a href="cart/cart.html">CART</a>
-            </div>
-        </nav>
-    </header>
-    <!-- end of header -->
+<div th:replace="~{fragments/header::header}"></div>
 
     <!-- ===========================================
-                    메인 컨텐츠 시작
-            해당 html은 vs code로 작업했기 때문에
-            데이터 부분은 이후 intelliJ로 옮기면서
-            수정해야함.
+                          수정사항
+            배너 이미지가 네 번째 이미지 이후로 넘어가면
+            초기화가 아니라 흰 배경으로 보여짐.
          ===========================================
     -->
     <!-- banner -->
@@ -93,7 +66,7 @@
             </div>
     
             <div class="item product3">
-                <a href="/상품상세페이지">
+                <a href="/상품상세페이지">ㄴ
                     <img th:src="@{/static-images/product/014.png}">
                     <div class="view-button"><i class="fas fa-search"></i> VIEW DETAILS</div>
                 </a>
@@ -184,66 +157,36 @@
             </div>
         </div>
     </div>
-    
 
-    <!-- footer 추후 html 분리 필요, css 분리 완료 -->
-    <footer>
-        <p>
-            &copy; 2024 feelyeon. All rights reserved.<br>
-            상호 ㈜ 필연<br>
-            대표 장보키<br>
-            사업자 등록번호 123-45-6789<br>
-            주소 15494 경기 안산시 상록구 광덕1로 375 강우프라자 5층 이젠컴퓨터아카데미<br>
-            대표전화 010-1234-5678<br>
-            통신판매업 신고 2024-경기안산-01234<br>
-            이메일 feelyeon@ezkb.co.kr<br>
-            COPYRIGHT © 필연 ALL RIGHTS RESERVED. DESIGNED By YUNI
-        </p>
-    </footer>
 
-    <script>
-        // =============== [ 공통 스크립트 ] ===============
-        //    1. 상단 메뉴 버튼
-        // =================================================
-        document.addEventListener("DOMContentLoaded", function () {
-            // header script
-            // menu slider
-            const sideMenu = document.getElementById('sideMenu');
-            const menuToggle = document.getElementById('menuToggle');
+    <div th:replace="~{fragments/footer::footer}"></div>
 
-            function toggleMenu() {
-                sideMenu.classList.toggle('open');
-            }
+    <th:block layout:fragment="script">
+        <script src="/js/adminBtn.js"></script>
+        <script th:inline="javascript">
+                // banner script
+                // slide and indicator
+                let currentIndex = 0;
+                const slides = document.querySelectorAll('.slide');
+                const indicators = document.querySelectorAll('.indicator');
+                const slider = document.querySelector('.slider');
 
-            menuToggle.addEventListener('click', toggleMenu);
+                function changeSlide() {
+                    slider.style.transform = `translateX(-${100 * currentIndex}vw)`;
 
-            document.addEventListener('click', function(event) {
-                if (!sideMenu.contains(event.target) && !menuToggle.contains(event.target)) {
-                    sideMenu.classList.remove('open');
+                    indicators.forEach(indicator => indicator.classList.remove('active'));
+                    indicators[currentIndex].classList.add('active');
+
+                    currentIndex = (currentIndex + 1) % slides.length;
                 }
-            });
-            
-            // banner script
-            // slide and indicator
-            let currentIndex = 0;
-            const slides = document.querySelectorAll('.slide');
-            const indicators = document.querySelectorAll('.indicator');
-            const slider = document.querySelector('.slider');
 
-            function changeSlide() {
-                slider.style.transform = `translateX(-${100 * currentIndex}vw)`;
+                setInterval(() => {
+                    changeSlide();
+                }, 4000);
 
-                indicators.forEach(indicator => indicator.classList.remove('active'));
-                indicators[currentIndex].classList.add('active');
-
-                currentIndex = (currentIndex + 1) % slides.length;
-            }
-
-            setInterval(() => {
                 changeSlide();
-            }, 4000);
-
-            changeSlide();
-        });
-    </script>
+            });
+        </script>
+    </th:block>
 </body>
+</html>
