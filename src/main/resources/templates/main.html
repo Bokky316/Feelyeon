@@ -8,12 +8,13 @@
         <link href="css/index.css" rel="stylesheet">
         <link href="css/header.css" rel="stylesheet">
         <link href="css/footer.css" rel="stylesheet">
+        <link rel="icon" href="static-images/favicon.png" type="image/png">
         <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
         <link href="https://fonts.googleapis.com/css2?family=Nanum+Gothic&family=Playfair+Display:ital,wght@0,400..900;1,400..900&display=swap" rel="stylesheet">
     </th:block>
 </head>
 <body>
-<div th:replace="~{fragments/header::header}"></div>
+    <div th:replace="~{fragments/header::header}"></div>
 
     <!-- ===========================================
                           수정사항
@@ -66,7 +67,7 @@
             </div>
     
             <div class="item product3">
-                <a href="/상품상세페이지">ㄴ
+                <a href="/상품상세페이지">
                     <img th:src="@{/static-images/product/014.png}">
                     <div class="view-button"><i class="fas fa-search"></i> VIEW DETAILS</div>
                 </a>
