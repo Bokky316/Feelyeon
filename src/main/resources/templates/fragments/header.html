@@ -1,29 +1,28 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+
 <div th:fragment="header">
-
-        <div class="event-area">
-            <div class="container">
-                <div class="text" id="text1">손 끝에서 시작되는, 당신의 인연</div>
-                <div class="text" id="text2">2025년 새해 복 많이 받으세요.</div>
-            </div>
+    <div class="event-area">
+        <div class="container">
+            <div class="text" id="text1">손 끝에서 시작되는, 당신의 인연</div>
+            <div class="text" id="text2">2025년 새해 복 많이 받으세요.</div>
         </div>
-        <nav>
-            <div class="categories" id="menuToggle"><i class="fas fa-bars"></i></div>
-            <div class="side-menu" id="sideMenu">
-                <ul>
-                    <li>Home</li>
-                    <li>About</li>
-                    <li>Services</li>
-                    <li>Contact</li>
-                </ul>
-            </div>
-            <a href="main.html" class="logo"><img th:src="@{/static-images/logo_bl.png}" alt="logo"></a>
-            <div class="nav header-btns">
-                <a href="#">SIGN UP</a>
-                <a href="#">LOGIN</a>
-                <a href="cart/cart.html">CART</a>
-            </div>
-        </nav>
-
+    </div>
+    <nav>
+        <div class="categories" id="menuToggle"><i class="fas fa-bars" sec:authorize="hasAnyAuthority('ROLE_ADMIN')"></i></div>
+        <div class="side-menu" id="sideMenu">
+            <ul>
+                <li><a href="http://localhost:8080/">Home</a></li>
+                <li><a aria-current="page" th:href="@{/admin/items}">Product Management</a></li>
+            </ul>
+        </div>
+        <a href="http://localhost:8080/" class="logo"><img th:src="@{/static-images/logo_bl.png}" alt="logo"></a>
+        <div class="nav header-btns">
+            <a sec:authorize="isAnonymous()" aria-current="page" th:onclick="|location.href='@{/members/new}'|">SIGN UP</a>
+            <a sec:authorize="isAnonymous()" aria-current="page" th:href="@{/members/login}">LOGIN</a>
+            <a sec:authorize="isAuthenticated()" aria-current="page" th:href="@{/members/logout}">LOGOUT</a>
+            <a aria-current="page" th:href="@{/cart}">CART</a>
+        </div>
+    </nav>
 </div>

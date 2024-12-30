@@ -14,8 +14,9 @@ import java.util.Map;
 
 /**
  * 인증 실패 시 처리할 핸들러
+ * - 권한이 없는 페이지에 접근 시 처리할 핸들러
  * - 인증 실패 시 401 Unauthorized 에러를 리턴
- * - 인증 실패 시 응답에 에러 메시지를 사용자에게 전달
+ * - 인증 실패 시 응답에 에러 메시지를 전달
  */
 @Log4j2
 public class CustomAuthenticationEntryPoint implements AuthenticationEntryPoint {

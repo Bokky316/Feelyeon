@@ -1,0 +1,150 @@
+body {
+    margin: 0;
+    font-family: 'Nanum Gothic', Arial, sans-serif;
+    background-color: #FAF6ED;
+    color: #333;
+    margin-top: 100px;
+}
+
+h1 {
+    margin-top: 20px;
+    margin-bottom: 40px;
+    text-align: center;
+    font-family: "Playfair Display", serif;
+}
+
+.itemFormBtn {
+    background: none;
+    color: black;
+    cursor: pointer;
+    text-align: center;
+    border: none;
+    padding: 10px 20px;
+    font-size: 0.9em;
+    margin-left: 85%;
+}
+
+.itemFormBtn:hover {
+    color: #777162;
+}
+
+table {
+    width: 80%;
+    margin: 20px auto;
+    border-collapse: collapse;
+    background-color: #fff;
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+th, td {
+    padding: 12px 15px;
+    text-align: center;
+    border-bottom: 1px solid #f2f2f2;
+}
+
+th {
+    background-color: #F1CB44;
+    color: #fff;
+    font-weight: bold;
+}
+
+td {
+    font-size: 0.9em;
+}
+
+a {
+    color: #BAA69F;
+    text-decoration: none;
+}
+
+.pagination {
+    display: flex;
+    justify-content: center;
+    list-style: none;
+    padding: 0;
+    margin: 20px 0;
+}
+
+.pagination .page-item {
+    margin: 0 5px;
+}
+
+.pagination .page-link {
+    display: block;
+    padding: 10px 15px;
+    background-color: #fff;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    color: #333;
+    font-size: 0.9em;
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.pagination .prev, .next {
+    cursor: pointer;
+}
+
+.pagination span {
+    color: #5A5957;
+}
+
+.pagination .page-item.active .page-link {
+    background-color: #5A5957;
+    color: #fff;
+    border: none;
+}
+
+.pagination .page-item.disabled .page-link {
+    color: #ccc;
+    cursor: pointer
+    background-color: #f9f9f9;
+}
+
+.prev, .next {
+    color: #5A5957;
+}
+
+/* Form Styling */
+.form-inline {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    margin: 20px 0;
+}
+
+.form-inline .form-control {
+    width: auto;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-size: 0.9em;
+}
+
+.form-inline .btn {
+    padding: 10px 20px;
+    background-color: black;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 0.9em;
+}
+
+/* Additional Styling */
+.table thead tr {
+    border-bottom: 1px solid #C5C0B4;
+}
+
+.table tbody tr:last-child {
+    border-bottom: none;
+}
+
+.table a {
+    color: #1B2F53;
+    font-weight: bold;
+}
+
+.table a:hover {
+    color: #BAA69F;
+}

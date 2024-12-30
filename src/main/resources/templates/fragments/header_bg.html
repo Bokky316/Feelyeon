@@ -1,23 +1,46 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
-<div th:fragment="header">
+<html xmlns:th="http://www.thymeleaf.org" lang="ko"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+
+<div th:fragment="header_bg">
 
 <!-- 베이지색 헤더 -->
 <header>
-    <div class="categories" id="menuToggle"><i class="fas fa-bars"></i></div>
+    <div class="categories" id="menuToggle"><i class="fas fa-bars" sec:authorize="hasAnyAuthority('ROLE_ADMIN')"></i></div>
     <div class="side-menu" id="sideMenu">
         <ul>
-            <li><a href="main.html">Home</a></li>
-            <li>About</li>
-            <li>Services</li>
-            <li>Contact</li>
+            <li><a href="http://localhost:8080/">Home</a></li>
+            <li><a aria-current="page" th:href="@{/admin/items}">Product Management</a></li>
         </ul>
     </div>
-    <a href="index.html" class="logo"><img th:src="@{/static-images/logo_bg.png}" alt="logo"></a>
+    <a href="http://localhost:8080/" class="logo"><img th:src="@{/static-images/logo_bg.png}" alt="logo"></a>
     <div class="nav header-btns">
-        <a href="#">SIGN UP</a>
-        <a href="#">LOGIN</a>
-        <a href="#">CART</a>
+        <a sec:authorize="isAnonymous()" aria-current="page" th:onclick="|location.href='@{/members/new}'|">SIGN UP</a>
+        <a sec:authorize="isAnonymous()" aria-current="page" th:href="@{/members/login}">LOGIN</a>
+        <a sec:authorize="isAuthenticated()" aria-current="page" th:href="@{/members/logout}">LOGOUT</a>
+        <a aria-current="page" th:href="@{/cart}">CART</a>
     </div>
 </header>
 </div>
+
+<th:block layout:fragment="script">
+    <script th:inline="javascript">
+        document.addEventListener("DOMContentLoaded", function () {
+            // header script
+            // menu slider
+            const sideMenu = document.getElementById('sideMenu');
+            const menuToggle = document.getElementById('menuToggle');
+
+            function toggleMenu() {
+                sideMenu.classList.toggle('open');
+            }
+
+            menuToggle.addEventListener('click', toggleMenu);
+
+            document.addEventListener('click', function(event) {
+                if (!sideMenu.contains(event.target) && !menuToggle.contains(event.target)) {
+                    sideMenu.classList.remove('open');
+                }
+            });
+    </script>
+</th:block>

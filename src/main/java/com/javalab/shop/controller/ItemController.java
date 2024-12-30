@@ -6,7 +6,6 @@ import com.javalab.shop.dto.ItemFormDto;
 import com.javalab.shop.dto.ItemSearchDto;
 import com.javalab.shop.entity.Item;
 import com.javalab.shop.service.ItemService;
-import com.javalab.shop.service.ItemImgService;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -21,14 +20,12 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 @Controller
 @RequiredArgsConstructor
@@ -102,7 +99,7 @@ public class ItemController {
     @GetMapping("/admin/item/new")
     public String itemForm(Model model){
         model.addAttribute("itemFormDto", new ItemFormDto());
-        return "/item/itemForm";
+        return "item/itemForm";
     }
 
     /**
@@ -166,16 +163,11 @@ public class ItemController {
     @PostMapping("/admin/item/{itemId}")
     public String itemUpdate(@Valid ItemFormDto itemFormDto,
                              BindingResult bindingResult,
-                             @RequestParam("itemImgFile") List<MultipartFile> itemImgFilelist,
-                             Model model,
-                             @RequestParam(value = "deleteImgIds", required = false) List<Long> deleteImgIds,
-                             @RequestParam(value = "deleteItem", required = false) boolean deleteItem // 삭제 요청을 위한 파라미터 추가
-    ) {
+                             @RequestParam("itemImgFile") List<MultipartFile> itemImgFilelist, Model model){
         // 1. 입력값 검증
-        if (bindingResult.hasErrors()) {
+        if(bindingResult.hasErrors()){
             return "item/itemForm";
         }
-
         // 2. 첫번째 상품 이미지가 비어있는 경우 검증
         if(itemImgFilelist.get(0).isEmpty() && itemFormDto.getId() == null){
             model.addAttribute("errorMessage", "첫번째 상품 이미지는 필수 입력 값 입니다.");
@@ -187,31 +179,17 @@ public class ItemController {
                 .filter(file -> !file.isEmpty())
                 .toList();
 
-        // 4. 상품 삭제 처리
-        if (deleteItem) {
-            try {
-                itemService.deleteItem(itemFormDto.getId());
-                return "redirect:/admin/items"; // 삭제 후 목록 페이지로 리다이렉트
-            } catch (Exception e) {
-                model.addAttribute("errorMessage", "상품 삭제 중 에러가 발생하였습니다.");
-                return "item/itemForm";
-            }
-        }
-
-        // 5. 상품 수정
-        try {
-            // 5-1. 상품 정보 업데이트
+        // 4. 상품 수정
+        try{
             itemService.updateItem(itemFormDto, itemImgFilelist);
-        } catch (Exception e) {
+        }catch(Exception e){
             model.addAttribute("errorMessage", "상품 수정 중 에러가 발생하였습니다.");
-            return "item/itemForm";
         }
 
-        // 6. 상품 수정 후 상세보기 페이지로 리다이렉트
-        return "redirect:/admin/item/" + itemFormDto.getId();
+       //return "redirect:/";
+       // 5. 상품 수정 후 상세보기 페이지로 리다이렉트
+       return "redirect:/admin/item/" + itemFormDto.getId();
     }
-
-
 
     /**
      * 상품 관리 페이지 이동 및 조회한 상품 데이터를 화면에 전달

@@ -85,19 +85,20 @@ public class ItemService {
         return itemFormDto;
     }
 
-    public long updateItem(ItemFormDto itemFormDto, List<MultipartFile> itemImgFileList) throws Exception {
+    public long updateItem(ItemFormDto itemFormDto,
+                           List<MultipartFile> itemImgFileList) throws Exception {
         // 1. 수정할 상품 조회, 영속화 - 상품 정보를 수정하기 위해 조회
         Item item = itemRepository.findById(itemFormDto.getId()).orElseThrow(EntityNotFoundException::new);
 
-        // 2. 영속화 되어 있는 상품의 정보를 수정한다. - 변경감지(dirty checking) - 자동감지 후 자동 저장됨.
+        // 2. 영속화 되어 있는 상품의 정보를 수정한다. - 변경 감지(dirty checking) - 자동감지후 자동 저장됨.
         item.updateItem(itemFormDto);
 
-        // 3. 화면에서 전달된 상품 이미지의 키(기본키)를 arrayLIst로 받아온다.
+        // 3. 화면에서 전달된 상품 이미지의 키(기본키)를  arrayList로 받아온다.
         List<Long> itemImgIds = itemFormDto.getItemImgIds();
 
         // 4. 화면에서 전달된 상품 이미지 파일을 업데이트한다.
-        for(int i=0; i<itemImgFileList.size(); i++){
-            // 4.1 상품 이미지 파일을 업데이트 한다. (상품 이미지 id, 상품 이미지 파일)
+        for(int i = 0; i < itemImgFileList.size(); i++){
+            // 4.1. 상품 이미지 파일을 업데이트한다.(상품 이미지 id, 상품 이미지 파일)
             itemImgService.updateItemImg(itemImgIds.get(i), itemImgFileList.get(i));
         }
         return item.getId();
@@ -111,29 +112,6 @@ public class ItemService {
     @Transactional(readOnly = true)
     public Page<MainItemDto> getMainItemPage(ItemSearchDto itemSearchDto, Pageable pageable){
         return itemRepository.getMainItemPage(itemSearchDto, pageable);
-    }
-
-    public boolean deleteItem(Long itemId) {
-        try {
-            // 1. 상품 ID로 해당 상품을 조회
-            Item item = itemRepository.findById(itemId)
-                    .orElseThrow(() -> new EntityNotFoundException("상품을 찾을 수 없습니다. ID: " + itemId));
-
-            // 2. 해당 상품의 이미지들을 조회
-            List<ItemImg> itemImgList = itemImgRepository.findByItemIdOrderByIdAsc(itemId);
-
-            // 3. 이미지 삭제
-            for (ItemImg itemImg : itemImgList) {
-                itemImgService.deleteItemImgs(List.of(itemImg.getId())); // 이미지 삭제 서비스 호출
-            }
-
-            // 4. 상품 삭제
-            itemRepository.delete(item);
-            return true; // 삭제 성공
-        } catch (Exception e) {
-            // 예외 발생 시 false 반환
-            return false;
-        }
     }
 
 }

@@ -10,8 +10,6 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 import org.thymeleaf.util.StringUtils;
 
-import java.util.List;
-
 @Service
 @RequiredArgsConstructor
 @Transactional
@@ -77,24 +75,5 @@ public class ItemImgService {
         // updateItemImg() 메서드는 ItemImg 엔티티의 메서드로 영속화 되어 있는 ItemImg 엔티티의 정보를 수정하게 되고
         // JPA가 변경감지하여 수정된 내용을 DB에 반영.
         itemImg.updateItemImg(oriImgName, imgName, imgUrl);
-    }
-
-    /**
-     * 상품 이미지 삭제
-     * - 주어진 ID 목록에 해당하는 상품 이미지들을 삭제하는 메서드
-     */
-    public void deleteItemImgs(List<Long> deleteImgIds) throws Exception {
-        for (Long imgId : deleteImgIds) {
-            ItemImg itemImg = itemImgRepository.findById(imgId)
-                    .orElseThrow(() -> new EntityNotFoundException("이미지를 찾을 수 없습니다. ID: " + imgId));
-
-            // 실제 파일 삭제
-            if (!StringUtils.isEmpty(itemImg.getImgName())) {
-                fileService.deleteFile(itemImgLocation + "/" + itemImg.getImgName());
-            }
-
-            // 데이터베이스에서 이미지 정보 삭제
-            itemImgRepository.delete(itemImg);
-        }
     }
 }

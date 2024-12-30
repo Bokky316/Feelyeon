@@ -58,7 +58,7 @@ class OrderServiceTest {
      */
     public Member saveMember(){
         Member member = new Member();
-        member.setEmail("test3@test.com");  // 실제로 데이터베이스에 있는 이메일을 넣으면 중복 에러 발생
+        member.setEmail("test2@test.com");  // 실제로 데이터베이스에 있는 이메일을 넣으면 중복 에러 발생
         return memberRepository.save(member);
     }
 
@@ -93,7 +93,7 @@ class OrderServiceTest {
 
     @Test
     @DisplayName("주문 취소 테스트")
-    //@Commit
+    @Commit
     public void cancelOrder(){
         // 1. given (상품 저장, 회원 저장)
         Item item = saveItem();

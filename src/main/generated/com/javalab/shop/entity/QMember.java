@@ -37,10 +37,14 @@ public class QMember extends EntityPathBase<Member> {
 
     public final StringPath password = createString("password");
 
+    public final StringPath provider = createString("provider");
+
     //inherited
     public final DateTimePath<java.time.LocalDateTime> regTime = _super.regTime;
 
     public final EnumPath<com.javalab.shop.constant.Role> role = createEnum("role", com.javalab.shop.constant.Role.class);
+
+    public final BooleanPath social = createBoolean("social");
 
     //inherited
     public final DateTimePath<java.time.LocalDateTime> updateTime = _super.updateTime;
