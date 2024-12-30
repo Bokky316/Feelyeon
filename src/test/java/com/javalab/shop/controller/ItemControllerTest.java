@@ -12,6 +12,7 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+
 @SpringBootTest
 @AutoConfigureMockMvc
 @Log4j2
@@ -25,9 +26,8 @@ public class ItemControllerTest {
      * - 가상의 사용자를 만들고 그 사용자의 권한으로 상품 등록 페이지를 요청할 수 있는지 테스트
      * - @WithMockUser : 가상의 사용자를 만들어서 테스트에 사용하는 어노테이션, username과 roles를 지정할 수 있음,
      *   중요한 건 roles에 ADMIN을 지정해주면 ADMIN 권한을 가진 사용자로 테스트를 진행할 수 있음.
-     * - andDo() : 테스트 수행 중에 추가적인 작업을 할 수 있는 메서드, log::info를 사용하면 로그를 출력할 수 있음.
-     *   log::info는 log.info()와 같은 의미
-     *
+     *   andDo() : 테스트 수행중에 추가적인 작업을 할 수 있는 메소드, log::info 를  사용하면 로그를 출력할 수 있음.
+     *   log::info는  log.info()와 같은 의미
      */
     @Test
     @DisplayName("상품 등록 페이지 권한 테스트")
@@ -35,7 +35,7 @@ public class ItemControllerTest {
     public void itemFormTest() throws Exception {
         mockMvc.perform(MockMvcRequestBuilders.get("/admin/item/new"))
                 .andDo(log::info)
-                .andExpect(status().isOk());    // andExpect() : 결과를 검증하는 메서드, status().isOk()는 HTTP 상태 코드가 200인지 검증
+                .andExpect(status().isOk()); //.andExpect() : 결과를 검증하는 메서드, status().isOk()는 HTTP 상태 코드가 200인지 검증
     }
 
     /**
@@ -48,6 +48,6 @@ public class ItemControllerTest {
     public void itemFormTest2() throws Exception {
         mockMvc.perform(MockMvcRequestBuilders.get("/admin/item/new"))
                 .andDo(log::info)
-                .andExpect(status().isForbidden());    // status().isForbidden()는 HTTP 상태 코드가 403인지 검증
+                .andExpect(status().isForbidden()); //status().isForbidden()는 HTTP 상태 코드가 403인지 검증
     }
 }

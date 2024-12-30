@@ -4,23 +4,28 @@ import com.javalab.shop.repository.MemberRepository;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.persistence.PersistenceContext;
+import jakarta.transaction.Transactional;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.security.test.context.support.WithMockUser;
-import org.springframework.transaction.annotation.Transactional;
 
 @SpringBootTest
 @Transactional
-class MemberTest {
+public class MemberTest {
 
     @Autowired
-    MemberRepository memberRepository;
+    private MemberRepository memberRepository;
 
     @PersistenceContext
-    EntityManager em;
+    private EntityManager em;
 
+    /**
+     * Auditing 테스트
+     * - 생성일, 수정일, 생성자, 수정자 테스트
+     * @WithMockUser : 스프링 시큐리티에서 제공하는 어노테이션으로 특정 사용자가 로그인한 상태라고 가정하고 테스트 진행
+     */
     @Test
     @DisplayName("Auditing 테스트")
     @WithMockUser(username = "gildong", roles = "USER")   // 특정 사용자가 로그인한 상태라고 가정하고 테스트 진행
@@ -40,4 +45,5 @@ class MemberTest {
         System.out.println("modify member : " + member.getModifiedBy());
 
     }
+
 }

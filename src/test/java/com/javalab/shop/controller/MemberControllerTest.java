@@ -4,7 +4,6 @@ import com.javalab.shop.dto.MemberFormDto;
 import com.javalab.shop.entity.Member;
 import com.javalab.shop.service.MemberService;
 import jakarta.transaction.Transactional;
-import lombok.extern.log4j.Log4j2;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,7 +18,6 @@ import static org.springframework.security.test.web.servlet.request.SecurityMock
 @SpringBootTest
 @AutoConfigureMockMvc
 @Transactional
-@Log4j2
 public class MemberControllerTest {
 
     @Autowired
@@ -35,7 +33,7 @@ public class MemberControllerTest {
      * 테스트 메소드에서 공용으로 사용하는 메소드
      * - 회원가입 테스트시 사용
      */
-    public Member createMember(String email, String password){
+    public Member createMember(String email, String password) {
         MemberFormDto dto = MemberFormDto.builder()
                 .email(email)
                 .name("홍길동")
@@ -44,28 +42,27 @@ public class MemberControllerTest {
                 .build();
 
         Member member = Member.createMember(dto, passwordEncoder); // Member 엔티티 생성
-        Member savedMember = memberService.saveMember(member);   // Member 저장
+        Member savedMember = memberService.saveMember(member);  // Member 저장
         return savedMember;
     }
 
     @Test
     @DisplayName("로그인 테스트(성공)")
-    public void loginSuccessTest() throws Exception {
-        // given
+    public void liginSuccessTest() throws Exception {
+        // Given
         String email = "abc@naver.com"; // db에 없는 이메일
         String password = "1234"; // 비밀번호
-        this.createMember(email, password); // 저장할 Member 엔티티 생성
+        Member member = createMember(email, password); // 저장할 Member 엔티티 생성
 
-        // when & then
-        // formLogin() 메소드를 사용하여 로그인 요청을 보내고 로그인 성공 여부를 확인
+        // When & then
+        // formLogin() : 메소드를 사용하여 로그인 요청을 보내고 로그인 성공 여부를 확인
         mockMvc.perform(formLogin()
                         .userParameter("email")
                         .loginProcessingUrl("/members/login")
-                        .user(email)    // 로그인 시도할 이메일, username() 대신에 user() 메소드 사용
+                        .user(email)        // 로그인 시도할 이메일, username() 대신에 user() 메소드 사용
                         .password(password)
                 )
-                .andExpect(SecurityMockMvcResultMatchers.authenticated());  // 로그인 인증이 성공했을 거라고 기대(단정)
-
+                .andExpect(SecurityMockMvcResultMatchers.authenticated()); // 로그인 인증이 성공했을거라고 기대(단정)
     }
 
     /**
@@ -73,23 +70,23 @@ public class MemberControllerTest {
      * @throws Exception
      */
     @Test
-    @DisplayName("로그인 테스트(성공)")
-    public void loginFailTest() throws Exception {
-        // given
+    @DisplayName("로그인 테스트(실패)")
+    public void liginFailTest() throws Exception {
+        // Given
         String email = "abc@naver.com"; // db에 없는 이메일
         String password = "1234"; // 비밀번호
-        this.createMember(email, password); // 저장할 Member 엔티티 생성
+        Member member = createMember(email, password); // 저장할 Member 엔티티 생성
 
-        // when & then
-        // formLogin() 메소드를 사용하여 로그인 요청을 보내고 로그인 성공 여부를 확인
+        // When & then
+        // formLogin() : 메소드를 사용하여 로그인 요청을 보내고 로그인 성공 여부를 확인
         mockMvc.perform(formLogin()
                         .userParameter("email")
                         .loginProcessingUrl("/members/login")
-                        .user(email)    // 로그인 시도할 이메일, username() 대신에 user() 메소드 사용
+                        .user(email)        // 로그인 시도할 이메일, username() 대신에 user() 메소드 사용
                         .password("123")
                 )
-                .andExpect(SecurityMockMvcResultMatchers.unauthenticated());  // 로그인 인증이 실패했을 거라고 기대(단정)
-
+                .andExpect(SecurityMockMvcResultMatchers.unauthenticated()); // 로그인 인증이 실패했을거라고 기대(단정)
     }
+
 
 }

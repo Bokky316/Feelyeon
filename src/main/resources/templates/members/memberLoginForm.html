@@ -28,9 +28,15 @@
           <label th:for="password"><i class="fa-solid fa-key"></i></label>
           <input type="password" id="password" name="password" required placeholder="Enter your password">
         </div>
+
         <p th:if="${loginErrorMsg}" class="error" th:text="${loginErrorMsg}"></p>
         <button type="submit" class="login-btn">Login</button>
         <a th:href="@{/members/new}" class="signup-link">SIGN UP</a>
+        <!-- 소셜 로그인 버튼 -->
+        <div class="social-login">
+          <p>소셜 계정으로 로그인:</p>
+          <a th:href="@{/oauth2/authorization/kakao}" class="btn btn-warning">카카오로 로그인</a>
+        </div>
       </form>
     </div>
   </div>

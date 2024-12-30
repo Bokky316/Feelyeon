@@ -69,8 +69,11 @@ dependencies {
 	// 위의 두 의존성을 모두 포함하는 밸리데이션 의존성
 	implementation 'org.springframework.boot:spring-boot-starter-validation:3.4.0'
 
-	//Mapper
+	// modelmapper Dto To Entity 변환작업을 해주는 클래스
 	implementation 'org.modelmapper:modelmapper:3.2.0'
+
+	// 소셜 로그인(oauth2 client)
+	implementation 'org.springframework.boot:spring-boot-starter-oauth2-client'
 }
 
 tasks.named('test') {
