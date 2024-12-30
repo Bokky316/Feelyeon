@@ -6,9 +6,9 @@ import com.javalab.shop.dto.OrderItemDto;
 import com.javalab.shop.entity.*;
 import com.javalab.shop.repository.ItemImgRepository;
 import com.javalab.shop.repository.ItemRepository;
+import jakarta.persistence.EntityNotFoundException;
 import com.javalab.shop.repository.MemberRepository;
 import com.javalab.shop.repository.OrderRepository;
-import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
@@ -25,34 +25,18 @@ import java.util.List;
 @RequiredArgsConstructor
 public class OrderService {
 
-    private final ItemRepository itemRepository;
-
-    private final MemberRepository memberRepository;
-
+    // 의존성 주입
     private final OrderRepository orderRepository;
-
+    private final ItemRepository itemRepository;
+    private final MemberRepository memberRepository;
     private final ItemImgRepository itemImgRepository;
 
-    /**
-     * 주문
-     * - 주문을 하기 위해서는 회원이 존재해야 하고, 주문할 상품이 존재해야 한다.
-     * - 주문 생성은 주문자와 주문 상품을 인자로 받아서 생성한다.
-     * - 주문할 상품은 상품 ID로 조회한다.
-     * - 주문할 상품의 수량은 주문 DTO에 담겨져 있다.
-     * - 주문자는 로그인한 회원의 이메일로 조회한다.
-     * - 주문 생성 후 저장한다.
-     * - 주문 번호를 반환한다.
-     * @param email 주문자 이메일을 인자로 받는다.
-     * @return
-     */
-    public Long order(OrderDto orderDto, String email){
-        // 1. 주문할 상품 조회, 영속화 상태로 만들기
-        Item item = itemRepository.findById(orderDto.getItemId())
-                .orElseThrow(EntityNotFoundException::new);
-
+    // 주문
+    public Long order(OrderDto orderDto, String email) {
+        // 1. 주문할 상품 조회(영속화)
+        Item item = itemRepository.findById(orderDto.getItemId()).orElseThrow(EntityNotFoundException::new);
         // 2. 주문자 조회, 영속화 상태로 만들기
         Member member = memberRepository.findByEmail(email);
-
         // 3. 주문 생성
         // 3.1. 주문 상품 생성
         List<OrderItem> orderItemList = new ArrayList<>();
@@ -62,11 +46,12 @@ public class OrderService {
         orderItemList.add(orderItem);
         // 3.4. 주문 생성(주문자, 주문 상품 리스트)
         Order order = Order.createOrder(member, orderItemList);
-        // 3.5. 주문 저장, 영속화 상태로 만들기
+        // 3.5. 주문 저장, 영속화 상태로 만들기, 주문 저장 쿼리문 실행
         orderRepository.save(order);
 
-        return order.getId();   // 주문 번호 반환
+        return order.getId();
     }
+
 
     /**
      * 주문 목록 조회
@@ -98,7 +83,7 @@ public class OrderService {
             for (OrderItem orderItem : orderItems) {
                 // 3.2.1 주문 상품 리스트에서 각 상품의 대표 이미지만 조회해서 ItemImg 객체 생성
                 ItemImg itemImg = itemImgRepository
-                                .findByItemIdAndRepimgYn(orderItem.getItem().getId(), "Y");
+                        .findByItemIdAndRepimgYn(orderItem.getItem().getId(), "Y");
                 // 3.2.2. 주문 상품 DTO 생성
                 OrderItemDto orderItemDto = new OrderItemDto(orderItem, itemImg.getImgUrl());
                 // 3.2.3 주문 DTO에 주문 상품 추가
@@ -121,13 +106,14 @@ public class OrderService {
      */
     @Transactional(readOnly = true)
     public boolean validateOrder(Long orderId, String email){
-
+        // 현재 로그인 한 회원 정보 조회
         Member curMember = memberRepository.findByEmail(email);
 
         Order order = orderRepository.findById(orderId)
                 .orElseThrow(EntityNotFoundException::new);
+        // 주문을 낸 회원 정보 조회
         Member savedMember = order.getMember();
-
+        // 주문을 낸 회원과 현재 로그인한 회원이 같은지 확인
         if(!StringUtils.equals(curMember.getEmail(), savedMember.getEmail())){
             return false;
         }
@@ -178,6 +164,8 @@ public class OrderService {
         // 6. 주문 번호 반환
         return order.getId();
     }
+
+
 
 
 }

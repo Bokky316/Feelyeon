@@ -22,7 +22,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.time.LocalDateTime;
-import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -35,13 +34,33 @@ public class ItemController {
 
     /**
      * 상품 상세 페이지
+     * 옛날꺼!!
+     */
+    @GetMapping("/item")
+    public String getItem(Model model) {
+        ItemDto itemDto = ItemDto.builder()
+                .id(1L)
+                .itemNm("테스트 상품")
+                .price(10000)
+                .stockNumber(10)
+                .itemDetail("테스트 상품 상세 설명")
+                .itemSellStatus(ItemSellStatus.SOLD_OUT)
+                //.regTime(LocalDateTime.now())
+                .build();
+        model.addAttribute("item", itemDto);
+        return "itemView"; // 타임리프 페이지
+    }
+
+    /**
+     * 상품 상세 페이지
      * - 파라미터를 쿼리 스트링 방식으로 전달
+     * 리스트에서 상품명 누르면 이동되는 페이지!!! !! !
      */
     @GetMapping("/view")
     public String getItem(@RequestParam("id") Long id, Model model) {
         ItemDto itemDto = ItemDto.builder()
                 .id(id)
-                .itemNm("테스트 상품 " + id)
+                .itemNm("테스트 상품" + id)
                 .price(10000)
                 .stockNumber(10)
                 .itemDetail("테스트 상품 상세 설명")
@@ -51,15 +70,18 @@ public class ItemController {
         model.addAttribute("item", itemDto);
         return "itemView"; // 타임리프 페이지
     }
+
+
     /**
      * 상품 상세 페이지 #2
-     * - PathVariable을 사용한 상품 상세 페이지
+     * - PathVariavle을 사용한 상품 상세 페이지
+     * 리스트에서 상품명 누르면 이동되는 페이지!!! !! !
      */
     @GetMapping("/view/{id}")
     public String getItem2(@PathVariable("id") Long id, Model model) {
         ItemDto itemDto = ItemDto.builder()
                 .id(id)
-                .itemNm("테스트 상품 " + id)
+                .itemNm("테스트 상품" + id)
                 .price(10000)
                 .stockNumber(10)
                 .itemDetail("테스트 상품 상세 설명")
@@ -97,10 +119,11 @@ public class ItemController {
      * 상품 등록 페이지
      */
     @GetMapping("/admin/item/new")
-    public String itemForm(Model model){
+    public String getForm(Model model) {
         model.addAttribute("itemFormDto", new ItemFormDto());
-        return "item/itemForm";
+        return "/item/itemForm";
     }
+
 
     /**
      * 상품 등록 처리
@@ -113,13 +136,14 @@ public class ItemController {
         if(bindingResult.hasErrors()){
             return "item/itemForm";
         }
-
+        // 첫번째 상품 이미지가 없고 id가 null인 경우 에러 메시지 전달 즉, 상품 최초 등록인 경우
         if(itemImgFileList.get(0).isEmpty() && itemFormDTO.getId() == null){
             model.addAttribute("errorMessage", "첫번째 상품 이미지는 필수 입력 값 입니다.");
             return "item/itemForm";
         }
 
-        // 첨부 파일이 없는 경우 제외
+        // 첨부 파일이 없는 경우 제외, 파일을 5개 첨부하도록 되어 있지만 실제로 두개만 첨부하면 나머지 3개도 null인 상태로
+        // 전달되므로 null인 파일은 제외시켜벌임 filter로!!  java stream API filter 한다.
         itemImgFileList = itemImgFileList.stream()
                 .filter(file -> !file.isEmpty())
                 .toList();
@@ -134,10 +158,9 @@ public class ItemController {
         return "redirect:/";
     }
 
-
     /**
      * 상품 상세 페이지
-     * - 상품 상세 페이지로 이동
+     * - 상품 번호를 전달 받아 상품 상세 페이지로 이동
      * @param itemId
      */
     @GetMapping("/admin/item/{itemId}")
@@ -146,8 +169,8 @@ public class ItemController {
             ItemFormDto itemFormDto = itemService.getItemDetail(itemId);
             model.addAttribute("itemFormDto", itemFormDto);
             return "item/itemForm";
-        }catch (EntityNotFoundException e){
-            model.addAttribute("errorMessage", "존재하지 않는 상품 입니다.");
+        } catch (EntityNotFoundException e){
+            model.addAttribute("errorMessage", "존재하지 않는 상품입니다.");
             return "item/itemForm";
         }
     }
@@ -155,41 +178,40 @@ public class ItemController {
     /**
      * 상품 수정 처리
      * - 상품 수정 페이지에서 입력한 상품 정보를 전달받아 상품을 수정하는 메서드
-     * - 상품 이미지를 수정하는 경우, 기존 이미지를 삭제하고 새로운 이미지를 등록한다.
-     * - 상품 이미지를 추가하는 경우, 새로운 이미지를 등록한다.
-     * - 상품 이미지를 삭제하는 경우, 해당 이미지를 삭제한다.
-     * - 상품 이미지를 수정하지 않는 경우, 기존 이미지를 그대로 사용한다.
+     * - 상품 이미지가 변경된 경우 기존 이미지를 삭제하고 새로운 이미지를 등록
+     * - 상품 이미지를 삭제하는 경우 기존 이미지를 삭제한다.
      */
     @PostMapping("/admin/item/{itemId}")
-    public String itemUpdate(@Valid ItemFormDto itemFormDto,
-                             BindingResult bindingResult,
-                             @RequestParam("itemImgFile") List<MultipartFile> itemImgFilelist, Model model){
+    public String itemUpdate(@Valid ItemFormDto itemFormDto, BindingResult bindingResult,
+                             @RequestParam("itemImgFile") List<MultipartFile> itemImgFileList,
+                             Model model){
         // 1. 입력값 검증
         if(bindingResult.hasErrors()){
             return "item/itemForm";
         }
         // 2. 첫번째 상품 이미지가 비어있는 경우 검증
-        if(itemImgFilelist.get(0).isEmpty() && itemFormDto.getId() == null){
+        if(itemImgFileList.get(0).isEmpty() && itemFormDto.getId() == null){
             model.addAttribute("errorMessage", "첫번째 상품 이미지는 필수 입력 값 입니다.");
             return "item/itemForm";
         }
 
         // 3. 총 첨부할 수 있는 파일의 개수는 5개에서 비어있는 파일을 제외
-        itemImgFilelist = itemImgFilelist.stream()
+        itemImgFileList = itemImgFileList.stream()
                 .filter(file -> !file.isEmpty())
                 .toList();
 
         // 4. 상품 수정
         try{
-            itemService.updateItem(itemFormDto, itemImgFilelist);
-        }catch(Exception e){
-            model.addAttribute("errorMessage", "상품 수정 중 에러가 발생하였습니다.");
+            itemService.updateItem(itemFormDto, itemImgFileList);
+        } catch (Exception e){
+            model.addAttribute("errorMessage", "상품 수정 중 에러가 발생했습니다.");
         }
 
-       //return "redirect:/";
-       // 5. 상품 수정 후 상세보기 페이지로 리다이렉트
-       return "redirect:/admin/item/" + itemFormDto.getId();
+//        return "redirect:/";
+        // 5. 상품 수정 후 상세보기 페이지로 리다이렉트
+        return "redirect:/admin/item/" + itemFormDto.getId();
     }
+
 
     /**
      * 상품 관리 페이지 이동 및 조회한 상품 데이터를 화면에 전달
@@ -214,11 +236,10 @@ public class ItemController {
 
         model.addAttribute("items", items);
         // itemSearchDto : 검색 조건을 화면에 다시 전달
+
         model.addAttribute("itemSearchDto", itemSearchDto);
         // maxPage : 최대 페이지 수, 화면에 5개의 페이지 번호를 표시
         model.addAttribute("maxPage", 5);
-        // Enum 값을 화면으로 전달
-        model.addAttribute("itemSellStatusList", ItemSellStatus.values());
 
         return "item/itemMng";
     }

@@ -12,7 +12,7 @@ import lombok.ToString;
 @Table(name = "cart")
 @Getter @Setter
 @ToString
-public class Cart  extends BaseEntity{
+public class Cart extends BaseEntity {
 
     // 카트 번호(ID)
     @Id
@@ -22,8 +22,9 @@ public class Cart  extends BaseEntity{
 
     /*
         * @OneToOne: 일대일 관계 설정
-        * @JoinColumn: 외래 키를 매핑설정(member_id : Member 엔티티의 테이블 컬럼명)
-        * fetch = FetchType.EAGER: 즉시 로딩 설정, 연관된 엔티티를 조인해서 함께 조회
+        * @JoinColumn: 외래 키를 매핑 설정(member_id : Member 엔티티의 테이블 컬럼명)
+        * fetch=FetchType.EAGER : 즉시 로딩 설정, 연관된 엔티티를 조인해서 함께 조회
+        * fetch=FetchType.LAZY : 지연 로딩 설정, 연관된 엔티티를 조회하지 않고, 실제로 사용할 때 조회
      */
     @OneToOne(fetch=FetchType.LAZY)
     @JoinColumn(name = "member_id")
@@ -41,4 +42,5 @@ public class Cart  extends BaseEntity{
         cart.setMember(member);
         return cart;
     }
+
 }

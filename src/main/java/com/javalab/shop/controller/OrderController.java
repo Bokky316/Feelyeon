@@ -28,17 +28,22 @@ public class OrderController {
 
     /**
      * 주문 페이지
-     * @param orderDto : 주문 정보
+     * @ResponseBody : 요청의 결과를 뷰를 사용하지 않고 JSON 형태 HTTP 응답의 바디에 직접 쓰기 위해 사용
+     * @RequestBody : html에서 전송된 값들이 JSON 형태로 전달되었을 때, 해당 값을 객체로 변환하기 위해 사용
+     * @ResponseEntity : HTTP 응답의 상태 코드, 헤더, 바디에
+     * @param orderDto : 주문 정보 바인딩
      * @param bindingResult : 유효성 검사 결과
      * @param principal : 시큐리티 Principal 객체로 로그인한 사용자 정보를 얻을 수 있다.
+     *
      * @return
      */
     @PostMapping("/order")
     public @ResponseBody ResponseEntity order(@RequestBody @Valid OrderDto orderDto
             , BindingResult bindingResult, Principal principal) {
-
+        // 주문 정보 유효성 검사
         if (bindingResult.hasErrors()) {
             StringBuilder sb = new StringBuilder();
+            // 유효성 검사 실패 시 에러 메시지 반환, getFieldErrors() : 빌드 에러 목록 반환
             List<FieldError> fieldErrors = bindingResult.getFieldErrors();
 
             for (FieldError fieldError : fieldErrors) {
@@ -70,7 +75,8 @@ public class OrderController {
     @GetMapping(value = {"/orders", "/orders/{page}"})
     public String orderHist(@PathVariable("page") Optional<Integer> page, Principal principal, Model model){
 
-        Pageable pageable = PageRequest.of(page.isPresent() ? page.get() : 0, 4);
+        Pageable pageable = PageRequest.of(page.isPresent() ? page.get() : 0, 4); // 하드코딩하는건 좋은건 아님
+        // Page 객체에는 주문 내역과 페이지 정보가 함께 담겨있다.
         Page<OrderHistDto> ordersHistDtoList = orderService.getOrderList(principal.getName(), pageable);
 
         model .addAttribute("orders", ordersHistDtoList);

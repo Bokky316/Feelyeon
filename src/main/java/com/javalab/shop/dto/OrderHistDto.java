@@ -11,7 +11,7 @@ import java.util.List;
 
 /**
  * 주문 정보를 전달하기 위한 DTO
- * - 주문 목록을 조회할 때 사용
+ * - 주문 목록 조회할 떄 사용
  *
  */
 @Getter @Setter

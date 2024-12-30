@@ -8,6 +8,9 @@ import org.springframework.data.repository.query.Param;
 
 import java.util.List;
 
+/**
+ * 주문 CRUD Repository
+ */
 public interface OrderRepository extends JpaRepository<Order, Long> {
     /**
      * 회원 이메일로 주문 조회, 주문은 최신순으로 정렬

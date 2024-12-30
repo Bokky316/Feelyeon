@@ -4,6 +4,11 @@ import com.javalab.shop.entity.ItemImg;
 import lombok.*;
 import org.modelmapper.ModelMapper;
 
+/**
+ * ItemImg 엔티티와 ItemImgDto 간의 데이터 변환을 담당하는 클래스
+ * - 상품 등록시 화면에서 전달받은 이미지 파일 정보를 저장하기 위해 사용
+ * - 데이터베이스에서 조회한 ItemImg 엔티티를 화면에 전달하기 위해 사용
+ */
 @Setter
 @Getter
 @ToString
