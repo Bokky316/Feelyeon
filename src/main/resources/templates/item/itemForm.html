@@ -1,49 +1,21 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org"
-      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-      layout:decorate="~{layouts/layout1}">
-
-<!-- 사용자 CSS 추가 -->
-<th:block layout:fragment="css">
-    <link rel="stylesheet" href="/css/item.css">
-</th:block>
-
-<th:block layout:fragment="script">
-    <script th:inline="javascript">
-        $(document).ready(function(){
-            var errorMessage = [[${errorMessage}]];
-            if(errorMessage != null){
-                alert(errorMessage);
-            }
-            // bindDomEvent()를 호출하여 사용자와 상호작용할 이벤트를 바인딩합니다
-            bindDomEvent();
-        });
-
-        function bindDomEvent(){
-            $(".custom-file-input").on("change", function() {
-                var fileName = $(this).val().split("\\").pop();  //이미지 파일명
-                var fileExt = fileName.substring(fileName.lastIndexOf(".")+1); // 확장자 추출
-                fileExt = fileExt.toLowerCase(); //소문자 변환
-
-                if(fileExt != "jpg" && fileExt != "jpeg" && fileExt != "gif" && fileExt != "png" && fileExt != "bmp"){
-                    alert("이미지 파일만 등록이 가능합니다.");
-                    return;
-                }
-
-                $(this).siblings(".custom-file-label").html(fileName); // 파일명을 input의 형제 요소인 label에 출력합니다. 이렇게 하는 이유는 input[type=file]은 파일명을 표시할 수 없기 때문입니다.
-            });
-        }
-    </script>
-</th:block>
-
-<div layout:fragment="content">
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>필연 : 必然 - 상품 등록</title>
+    <th:block layout:fragment="css">
+        <link rel="stylesheet" href="/css/item/itemForm.css">
+        <link rel="stylesheet" href="/css/common/header_bg.css">
+        <link rel="stylesheet" href="/css/common/footer.css">
+        <link rel="icon" href="static-images/favicon.png" type="image/png">
+        <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+        <link href="https://fonts.googleapis.com/css2?family=Nanum+Gothic&family=Playfair+Display:ital,wght@0,400..900;1,400..900&display=swap" rel="stylesheet">
+    </th:block>
+</head>
+<body>
+    <div th:replace="~{fragments/header_bg::header_bg}"></div>
 
     <form role="form" method="post" enctype="multipart/form-data" th:object="${itemFormDto}">
-
-        <p class="h2">
-            상품 등록
-        </p>
-
         <input type="hidden" th:field="*{id}">
 
         <div class="form-group">
@@ -57,7 +29,7 @@
             <div class="input-group-prepend">
                 <span class="input-group-text">상품명</span>
             </div>
-            <input type="text" th:field="*{itemNm}" class="form-control" placeholder="상품명을 입력해주세요">
+            <input type="text" th:field="*{itemNm}" class="form-control" placeholder="상품명을 입력해주세요.">
         </div>
         <p th:if="${#fields.hasErrors('itemNm')}" th:errors="*{itemNm}" class="fieldError">Incorrect data</p>
 
@@ -65,7 +37,7 @@
             <div class="input-group-prepend">
                 <span class="input-group-text">가격</span>
             </div>
-            <input type="number" th:field="*{price}" class="form-control" placeholder="상품의 가격을 입력해주세요">
+            <input type="number" th:field="*{price}" class="form-control" placeholder="상품의 가격을 입력해주세요.">
         </div>
         <p th:if="${#fields.hasErrors('price')}" th:errors="*{price}" class="fieldError">Incorrect data</p>
 
@@ -73,7 +45,7 @@
             <div class="input-group-prepend">
                 <span class="input-group-text">재고</span>
             </div>
-            <input type="number" th:field="*{stockNumber}" class="form-control" placeholder="상품의 재고를 입력해주세요">
+            <input type="number" th:field="*{stockNumber}" class="form-control" placeholder="상품의 재고를 입력해주세요.">
         </div>
         <p th:if="${#fields.hasErrors('stockNumber')}" th:errors="*{stockNumber}" class="fieldError">Incorrect data</p>
 
@@ -85,25 +57,26 @@
         </div>
         <p th:if="${#fields.hasErrors('itemDetail')}" th:errors="*{itemDetail}" class="fieldError">Incorrect data</p>
 
-        <!-- 만약 itemFormDto.itemImgDtoList가 비어있다면 이건 최초로 상품을 등록하는 경우이므로 5개의 이미지를 등록할 수 있는 input을 생성합니다. -->
+        <!-- 이미지 업로드 영역 (itemFormDto.itemImgDtoList is empty) -->
         <div th:if="${#lists.isEmpty(itemFormDto.itemImgDtoList)}">
-            <div class="form-group" th:each="num: ${#numbers.sequence(1,5)}">
+            <span class="custom-file-label"><i class="fa-solid fa-camera"></i> 이미지 업로드</span>
+            <div class="form-group" th:each="num: ${#numbers.sequence(1, 5)}">
                 <div class="custom-file img-div">
                     <input type="file" class="custom-file-input" name="itemImgFile">
-                    <label class="custom-file-label" th:text="상품이미지 + ${num}"></label>
                 </div>
             </div>
         </div>
-        <!-- 만약 itemFormDto.itemImgDtoList가 비어있지 않다면 이건 이미지를 수정하는 경우이므로 이미지를 수정할 수 있는 input을 생성합니다. -->
+
+        <!-- 이미지 수정 영역 (itemFormDto.itemImgDtoList NOT empty) -->
         <div th:if = "${not #lists.isEmpty(itemFormDto.itemImgDtoList)}">
             <div class="form-group" th:each="itemImgDto, status: ${itemFormDto.itemImgDtoList}">
                 <div class="custom-file img-div">
                     <input type="file" class="custom-file-input" name="itemImgFile">
                     <input type="hidden" name="itemImgIds" th:value="${itemImgDto.id}">
-                    <label class="custom-file-label" th:text="${not #strings.isEmpty(itemImgDto.oriImgName)} ? ${itemImgDto.oriImgName} : '상품이미지' + ${status.index+1}"></label>
                 </div>
             </div>
         </div>
+
         <!-- 상품 번호가 비어 있다면 신규 상품 등록을 위한 버튼을 생성하고, 상품 번호가 비어 있지 않다면 수정을 위한 버튼을 생성합니다. -->
         <div th:if="${#strings.isEmpty(itemFormDto.id)}" style="text-align: center">
             <button th:formaction="@{/admin/item/new}" type="submit" class="btn btn-primary">저장</button>
@@ -118,9 +91,42 @@
             <input type='hidden' name='deleteItem' value='true'>
 
             <!-- 삭제 버튼 -->
-            <button type='submit' class='btn btn-danger'
-                    onclick='return confirm("정말로 삭제하시겠습니까?");'>삭제</button>
+            <button type='submit' class='btn btn-danger' onclick='return confirm("정말로 삭제하시겠습니까?");'>삭제</button>
         </div>
     </form>
-</div>
+
+    <div th:replace="~{fragments/footer::footer}"></div>
+
+    <th:block layout:fragment="script">
+        <script src="/js/adminBtn.js"></script>
+        <script th:inline="javascript">
+            $(document).ready(function(){
+                // 타임리프에서 서버에 전달된 값을 사용하기 위해서는 대괄호 두개 형식으로 사용합니다.
+                // 대괄호 두개로 사용하면 서버의 값을 적절하게 인코딩 해줍니다. 악의적인 코드도 실행되지 않도록 방지합니다.
+                var errorMessage = [[${errorMessage}]];
+                if(errorMessage != null){
+                    alert(errorMessage);
+                }
+                // bindDomEvent()를 호출하여 사용자와 상호작용할 이벤트를 바인딩합니다
+                bindDomEvent();
+            });
+            // custom-file-input 클래스를 가진 input 요소에 change 이벤트를 바인딩합니다.
+            // 파일 선택을 감지하고 파일명을 출력합니다.
+            function bindDomEvent(){
+                $(".custom-file-input").on("change", function() {
+                    var fileName = $(this).val().split("\\").pop();  //이미지 파일명 추출
+                    var fileExt = fileName.substring(fileName.lastIndexOf(".")+1); // 확장자 추출
+                    fileExt = fileExt.toLowerCase(); //확장자를 소문자 변환
+
+                    if(fileExt != "jpg" && fileExt != "jpeg" && fileExt != "gif" && fileExt != "png" && fileExt != "bmp"){
+                        alert("이미지 파일만 등록이 가능합니다.");
+                        return;
+                    }
+
+                    $(this).siblings(".custom-file-label").html(fileName); // 파일명을 input의 형제 요소인 label에 출력합니다. 이렇게 하는 이유는 input[type=file]은 파일명을 표시할 수 없기 때문입니다.
+                });
+            }
+        </script>
+    </th:block>
+</body>
 </html>
