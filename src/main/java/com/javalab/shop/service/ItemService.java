@@ -141,14 +141,14 @@ public class ItemService {
         return itemRepository.getMainItemPage(itemSearchDto, pageable);
     }
 
-
-    /**
-     * 모든 활성화된 아이템 목록을 조회하는 메서드.
-     * @return 활성화된 아이템 리스트
-     */
-    public List<Item> getActiveItems() {
-        return itemRepository.findByActiveTrue(); // 활성화된 아이템 조회
+    // 활성화된 아이템 목록 조회
+    @Transactional(readOnly = true)
+    public Page<Item> getActiveItems(ItemSearchDto itemSearchDto, Pageable pageable) {
+        return itemRepository.findByActiveTrue(pageable); // active가 true인 아이템 조회
     }
+
+
+
 
     /**
      * 특정 ID의 아이템을 활성화하는 메서드.

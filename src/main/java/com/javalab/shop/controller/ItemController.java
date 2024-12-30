@@ -241,6 +241,23 @@ public class ItemController {
         return "item/itemMng";
     }
 
+
+    /**
+     * 모든 활성화된 아이템 목록을 조회하는 API.
+     * @return HTTP 응답 상태 200 OK와 함께 활성화된 아이템 리스트 반환
+     */
+    @GetMapping("/admin/items/active")
+    public String getActiveItems(ItemSearchDto itemSearchDto, Model model) {
+        Pageable pageable = PageRequest.of(0, 3); // 첫 페이지로 설정
+        Page<Item> activeItems = itemService.getActiveItems(itemSearchDto, pageable); // 활성화된 아이템 조회
+
+        model.addAttribute("items", activeItems);
+        model.addAttribute("itemSearchDto", itemSearchDto);
+        model.addAttribute("maxPage", 5); // 최대 페이지 수 설정
+
+        return "item/itemMng"; // 아이템 관리 페이지로 이동
+    }
+
     /**
      * 상품 상세 페이지
      * - 상품 상세 페이지로 이동
@@ -253,15 +270,7 @@ public class ItemController {
         return "item/itemDetail";
     }
 
-    /**
-     * 모든 활성화된 아이템 목록을 조회하는 API.
-     * @return HTTP 응답 상태 200 OK와 함께 활성화된 아이템 리스트 반환
-     */
-    @GetMapping("/active")
-    public ResponseEntity<List<Item>> getActiveItems() {
-        List<Item> activeItems = itemService.getActiveItems(); // 서비스 메서드 호출하여 리스트 조회
-        return ResponseEntity.ok(activeItems); // 활성화된 아이템 목록 반환
-    }
+
 
     /**
      * 특정 ID의 아이템을 활성화하는 API.

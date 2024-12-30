@@ -60,7 +60,12 @@
     <h1>Product Management</h1>
 
     <form th:action="@{'/admin/items/' + ${items.number}}" role="form" method="get" th:object="${items}">
+        <!-- 활성화된 아이템만 보기 버튼 -->
+
+        <button type="button" th:onclick="|location.href='@{/admin/items/active}';|" class="btn btn-primary">활성화된 아이템만 보기</button>
+        <button type="button" th:onclick="|location.href='@{/admin/items}';|" class="btn btn-primary">전체 아이템 보기</button>
         <button type="button" th:onclick="|location.href='@{/admin/item/new}';|" class="itemFormBtn">상품등록</button>
+
         <table class="table">
             <thead>
             <tr>
@@ -82,7 +87,7 @@
                 <td th:text="${item.createdBy}"></td>
                 <td th:text="${#temporals.format(item.regTime, 'yyyy-MM-dd HH:mm:ss')}"></td>
                 <td>
-                    <!-- 아이템 활성화/비활성화 버튼 -->
+                    <!-- 아이템 활성화/비활성화  -->
                     <button onclick="toggleItem(${item.id}, ${item.active})">
                         <!-- 버튼 텍스트 동적 변경 -->
                         <span th:text="${item.active} ? '비활성화' : '활성화'"></span>
