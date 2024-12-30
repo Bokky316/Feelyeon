@@ -27,16 +27,12 @@ import org.springframework.web.bind.annotation.ResponseBody;
 @Controller
 @RequestMapping("/members")
 @RequiredArgsConstructor
-@Log4j2 // 로그를 사용하기 위한 어노테이션, log.info() 사용가능
+@Log4j2 // 로그를 사용하기위한 어노테이션, log.info() 사용가능
 public class MemberController {
 
     private final MemberService memberService;
-    private final PasswordEncoder passwordEncoder;  // 비밀번호 암복호화
+    private final PasswordEncoder passwordEncoder; // 비밀번호 암복호화하는 역할
 
-    /**
-     * 회원가입 폼
-     * - 회원가입 폼을 제공하는 컨트롤러
-     */
     @GetMapping("/new")
     public String memberForm(Model model){
         model.addAttribute("memberFormDto", new MemberFormDto());
@@ -47,23 +43,22 @@ public class MemberController {
      * 회원가입 처리
      * - 회원가입 처리를 하는 컨트롤러
      * - 회원가입 폼에서 전달되는 데이터가 정상인지 검증하는 로직이 필요함.
-     * - @Valid : MemberFormDto에 정의된 검증 로직을 수행함.
+     * - valid() : MemberFormDto에 정의된 검증 로직을 수행함
      * - BindingResult : 검증 결과를 담고 있는 객체, 오류 발생시 오류 내용을 담고 있음.
-     * - 회원가입 폼에서 전달되는 데이터가 정상이 아닌 경우, 다시 회원가입 폼으로 이동해야함.
+     * - 회원가입 폼에서 전달되는 데이터가 정상이 아닌 경우, 다시 회원가입 폼으로 이동해야 함.
      */
     @PostMapping("/new")
-    public String memberCreate(@Valid MemberFormDto memberFormDto,
-                               BindingResult bindingResult, Model model){
+    public String memberCreate(@Valid MemberFormDto memberFormDto, BindingResult bindingResult, Model model) {
 
-        // 1. 오류가 있다면 회원 가입 폼으로 이동
+        // 1. 만약에 오류가 있다면 회원가입 폼으로 이동
         if(bindingResult.hasErrors()){
             return "members/memberForm";
         }
         try {
             // 2. 회원가입 처리
-            // 2.1. MemberFormDto를 Member 엔티티로 변환
+            // 2.1 MemberFormDto를 Member Entity로 변환
             Member member = Member.createMember(memberFormDto, passwordEncoder);
-            // 2.2. 회원가입 처리메소드 호출
+            // 2.2 회원가입 처리메소드 호출
             memberService.saveMember(member);
         } catch (IllegalStateException e) {
             // 3. 회원가입 중복 오류 발생시
@@ -73,7 +68,7 @@ public class MemberController {
             model.addAttribute("errorMessage", e.getMessage());
             return "members/memberForm";
         }
-        return "redirect:/";    // 회원가입 성공시 메인페이지로 이동
+        return "redirect:/";    // 회원가입 성공시 메인 페이지로 이동
     }
 
     /**
@@ -81,10 +76,9 @@ public class MemberController {
      * @return
      */
     @GetMapping("/login")
-    public String loginMember(Model model){
+    public String loginMember(){
         log.info("로그인 화면 오픈 메소드");
-        model.addAttribute("memberFormDto", new MemberFormDto());
-        return "/members/memberLoginForm";
+        return "members/memberLoginForm";
     }
 
     /**
@@ -95,21 +89,19 @@ public class MemberController {
     @GetMapping("/login/error")
     public String loginError(Model model){
         model.addAttribute("loginErrorMsg", "아이디 또는 비밀번호 확인해주세요");
-        return "/members/memberLoginForm";
+        return "members/memberLoginForm";
     }
 
     /**
      * 로그아웃 성공시 메인페이지로 이동
      */
     @GetMapping("/logout")
-    public String performLogout(HttpServletRequest request,
-                                HttpServletResponse response) {
+    public String performLogout(HttpServletRequest request, HttpServletResponse response) {
         // 1. 현재 로그인한 사용자 정보를 시큐리티 컨텍스트 홀더에서 가져옴
-        // org.springframework.security.core.Authentication;
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         // 2. 로그인한 사용자 정보가 있다면 로그아웃 처리
-        if(authentication != null){
-            // 2.1. 로그아웃 처리
+        if (authentication != null) {
+            // 2.1 로그아웃 처리
             new SecurityContextLogoutHandler().logout(request, response, authentication);
         }
         // 3. 메인페이지로 이동

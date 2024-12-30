@@ -40,13 +40,13 @@ public class CartService {
      * @param email
      */
     public Long addCart(CartItemDto cartItemDto, String email) {
-        // 1. 장바구니에 담을 상품 조회
+        // 1. 장바구니에 담을 상품 조회(상품이 영속 영역에 저장)
         Item item = itemRepository.findById(cartItemDto.getItemId())
                 .orElseThrow(EntityNotFoundException::new);
         // 2. 로그인 한 회원엔티티 조회
         Member member = memberRepository.findByEmail(email);
 
-        // 3. 회원의 장바구니가 만들어져 있는지 조회
+        // 3. 회원의 장바구니가 이미 만들어져 있는지 조회
         Cart cart = cartRepository.findByMemberId(member.getId());
 
         // 4. 장바구니가 없다면 새로 생성(최초로 장바구니 생성 회원)

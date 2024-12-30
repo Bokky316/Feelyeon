@@ -20,20 +20,20 @@ import org.hibernate.validator.constraints.Length;
 @Builder
 public class MemberFormDto {
     // 필드, 속성
-    @NotBlank(message = "이름을 입력해주세요.")  // 공백도 안되고 null도 안됨
+    @NotBlank(message = "이름을 입력해주세요.") // 공백도 안되고 null도 안된다.
     private String name;
     /*
-        * @NotBlank(message = "이메일을 입력해주세요.")
-        * @Email(regexp = "이메일 정규식", message = "이메일 형식이 올바르지 않습니다.")
+        @NotBlank(message = "이메일을 입력해주세요.")
+        @Email(regexp = "이메일 정규식", message = "이메일 형식이 올바르지 않습니다.")
      */
-    @NotBlank(message = "이메일을 입력해주세요.") // 공백도 안되고 null도 안됨
+    @NotBlank(message = "이메일을 입력해주세요.")  // 공백도 안되고 null도 안된다.)
     @Email(regexp = "^[\\w.%+-]+@[\\w.-]+\\.[a-zA-Z]{2,6}$", message = "유효한 이메일 형식으로 입력해주세요.")
     private String email;
 
-    @NotBlank(message = "비밀번호를 입력해주세요.") // 공백도 안되고 null도 안됨
+    @NotBlank(message = "비밀번호를 입력해주세요.") // 공백도 안되고 null도 안됨.
     @Length(min = 4, max = 16, message = "비밀번호는 4자 이상 16자 이하로 입력해주세요.")
     private String password;
 
-    @NotBlank(message = "주소를 입력해주세요.")
+    @NotBlank(message = "주소를 입력해주세요.") // 공백도 안되고 null도 안됨.
     private String address;
 }

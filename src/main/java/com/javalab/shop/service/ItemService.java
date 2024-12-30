@@ -6,9 +6,9 @@ import com.javalab.shop.dto.ItemSearchDto;
 import com.javalab.shop.dto.MainItemDto;
 import com.javalab.shop.entity.Item;
 import com.javalab.shop.entity.ItemImg;
+import jakarta.persistence.EntityNotFoundException;
 import com.javalab.shop.repository.ItemImgRepository;
 import com.javalab.shop.repository.ItemRepository;
-import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -24,28 +24,38 @@ import java.util.List;
 @RequiredArgsConstructor
 public class ItemService {
 
+    // 의존성 주입
     private final ItemRepository itemRepository;
     private final ItemImgService itemImgService;
     private final ItemImgRepository itemImgRepository;
 
-    public Long saveItem(ItemFormDto itemFormDTO, List<MultipartFile> itemImgFileList) throws Exception{
+    // 상품 등록
+    public Long saveItem(ItemFormDto itemFormDto, List<MultipartFile> itemImgFileList) throws Exception{
 
-        //상품 등록
-        Item item = itemFormDTO.crateItem();
-        itemRepository.save(item);  // 영속화 내부적으로 JPA의 EntityManager.persist(order)를 호출합니다.
+        // 1. 상품 등록, 저장(영속화)
+        // 1.1. ItemFormDto의 crateItem() 메소드를 통해 Item 객체 생성(Dto -> Entity)
+        Item item = itemFormDto.createItem();
+        // 1.2. ItemRepository의 save() 메소드를 통해 Item 객체 저장
+        // save(item) : JPA의 ENtityManager가 persist(item) 메소드 호출해서 해당 엔티티를 영속화
+        // item 엔티티가 데이터베이스에 저장되고 기본키를 발급받아서 그 기본키로 영속성 컨텍스트에 저장됨
+        itemRepository.save(item);
 
-        //이미지 등록
+        // 2. 이미지 등록
         for(int i=0;i<itemImgFileList.size(); i++){
+            // 2.1. ItemImg 객체 생성
             ItemImg itemImg = new ItemImg();
+            // 2.2. Item 객체와 연관관계 설정
             itemImg.setItem(item);
+            // 2.3. 대표 이미지 여부 설정
             if( i == 0)
                 itemImg.setRepimgYn("Y");
             else
                 itemImg.setRepimgYn("N");
+            // 2.4. ItemImgService의 saveItemImg() 메소드를 통해 ItemImg 객체 저장
             itemImgService.saveItemImg(itemImg, itemImgFileList.get(i));
         }
+        return item.getId();// 3. 등록된 Item ID 반환
 
-        return item.getId();
     }
 
     /**
@@ -74,7 +84,7 @@ public class ItemService {
 
         // 3. 상품 번호로 해당 상품을 조회한다. 이렇게 조회하면 영속성 컨텍스트에 해당 엔티티가 영속화된다.
         Item item = itemRepository.findById(itemId)
-                    .orElseThrow(EntityNotFoundException::new);
+                .orElseThrow(EntityNotFoundException::new);
 
         // 조회한 3.상품 정보와 2.이미지 정보를 조합하여 ItemFormDto로 변환한다.
         // 변환하는 이유는 화면에 출력하기 위함이다.
@@ -82,28 +92,42 @@ public class ItemService {
 
         // 4. ItemFormDto에 이미지 정보를 설정한다.
         itemFormDto.setItemImgDtoList(itemImgDtoList);
+        // 상품정보와 상품의 이미지 정보들에 대한 조회가 완료
+
         return itemFormDto;
     }
 
-    public long updateItem(ItemFormDto itemFormDto,
-                           List<MultipartFile> itemImgFileList) throws Exception {
+    /**
+     * 상품 수정
+     * @param itemFormDto
+     * @param itemImgFileList
+     * @return
+     * @throws Exception
+     */
+    public long updateItem(ItemFormDto itemFormDto, List<MultipartFile> itemImgFileList) throws Exception {
         // 1. 수정할 상품 조회, 영속화 - 상품 정보를 수정하기 위해 조회
         Item item = itemRepository.findById(itemFormDto.getId()).orElseThrow(EntityNotFoundException::new);
 
-        // 2. 영속화 되어 있는 상품의 정보를 수정한다. - 변경 감지(dirty checking) - 자동감지후 자동 저장됨.
+        // 2. 영속화 되어 있는 상품의 정보를 수정한다. - 변경감지(dirty checking) - 자동감지 후 자동 저장됨.
         item.updateItem(itemFormDto);
 
-        // 3. 화면에서 전달된 상품 이미지의 키(기본키)를  arrayList로 받아온다.
+        // 3. 화면에서 전달된 상품 이미지의 키(기본키)를 arrayLIst로 받아온다.
         List<Long> itemImgIds = itemFormDto.getItemImgIds();
 
         // 4. 화면에서 전달된 상품 이미지 파일을 업데이트한다.
-        for(int i = 0; i < itemImgFileList.size(); i++){
-            // 4.1. 상품 이미지 파일을 업데이트한다.(상품 이미지 id, 상품 이미지 파일)
+        for(int i=0; i<itemImgFileList.size(); i++){
+            // 4.1 상품 이미지 파일을 업데이트 한다. (상품 이미지 id, 상품 이미지 파일)
             itemImgService.updateItemImg(itemImgIds.get(i), itemImgFileList.get(i));
         }
         return item.getId();
     }
 
+    /**
+     * 상품 목록 조회
+     * @param itemSearchDto : 복잡한 검색 조건을 담은 DTO
+     * @param pageable : 페이징 처리를 위한 Pageable 객체
+     * @return
+     */
     @Transactional(readOnly = true)
     public Page<Item> getAdminItemPage(ItemSearchDto itemSearchDto, Pageable pageable){
         return itemRepository.getAdminItemPage(itemSearchDto, pageable);
@@ -113,5 +137,4 @@ public class ItemService {
     public Page<MainItemDto> getMainItemPage(ItemSearchDto itemSearchDto, Pageable pageable){
         return itemRepository.getMainItemPage(itemSearchDto, pageable);
     }
-
 }

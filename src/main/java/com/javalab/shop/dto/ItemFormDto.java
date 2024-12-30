@@ -9,6 +9,13 @@ import org.modelmapper.ModelMapper;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * 상품 등록/수정 화면에서 사용하는 DTO 클래스
+ * - 화면에서 입력한 상품 관련 정보를 담아서 컨트롤러 레이어로 전달합니다.
+ * - Item 엔티티와 1:1로 매핑됩니다.
+ * - Item 엔티티와의 변환을 위해 ModelMapper를 사용합니다.
+ * - Validation 어노테이션을 사용하여 입력값의 유효성을 검증합니다.
+ */
 @Getter@Setter
 @AllArgsConstructor
 @NoArgsConstructor
@@ -41,29 +48,39 @@ public class ItemFormDto {
      * 용도
      *  - 상품 이미지의 상세 정보를 프론트엔드에서 보여주기 위해 사용.
      *  - 예를 들어, 상품 수정 화면에서 이미 저장된 이미지의 정보를 표시.
+     * @Builder.Default
+     *  - 이 Dto를 Builder 패턴으로 객체 생성할 때 위 옵션을 안쓰면 itemImgDtoList 필드는 null이 됩니다.
+     *  - 이를 방지하기 위해 @Builder.Default를 사용하여 객체 생성 시 itemImgDtoList 필드를 빈 리스트로 초기화합니다.
+     * new ArrayList<>()
+     *  - itemImgDtoList 필드를 객체로 생성해서 빌 ArrayList로 초기화해놓으면 나중에 객체 생성할 때 별도 new ArrayList<>()를
+     *    하지 않아도 된다.
      */
     @Builder.Default    //@Builder.Default가 없으면, 객체를 빌더로 생성할 때 해당 필드가 null로 초기화됩니다.
     private List<ItemImgDto> itemImgDtoList = new ArrayList<>();
 
     /*
-        * 상품 이미지의 고유 ID(Primary Key)만을 담고 있는 리스트.
-        * - 각 ID는 데이터베이스에서 이미 저장된 이미지 엔티티(ItemImg)를 식별하는 데 사용됩니다.
-        * - 상품 수정 페이지에서는 각 이미지 입력 필드와 함께 해당 이미지의 ID를 숨겨진 필드로 전송합니다.
-        * 용도
-        * - 이미지 수정/삭제 시 특정 이미지를 식별하기 위해 사용.
-        * - 예를 들어, 이미지를 삭제할 때 해당 이미지의 ID를 기반으로 삭제 작업 수행.
+     * 상품 이미지의 고유 ID(Primary Key)만을 담고 있는 리스트.
+     * - 각 ID는 데이터베이스에서 이미 저장된 이미지 엔티티(ItemImg)를 식별하는 데 사용됩니다.
+     * - 상품 수정 페이지에서는 각 이미지 입력 필드와 함께 해당 이미지의 ID를 숨겨진 필드로 전송합니다.
+     * 용도
+     * - 이미지 수정/삭제 시 특정 이미지를 식별하기 위해 사용.
+     * - 예를 들어, 이미지를 삭제할 때 해당 이미지의 ID를 기반으로 삭제 작업 수행.
      */
-     @Builder.Default
+    @Builder.Default
     private List<Long> itemImgIds = new ArrayList<>();
 
     private static ModelMapper modelMapper = new ModelMapper();
 
-    // ItemFormDto를 Item 엔티티로 변환
-    public Item crateItem(){
+    /**
+     * ItemFormDto를 Item 엔티티로 변환
+     * - 화면에서 입력한 상품 관련 정보를 담은 ItemFormDto 객체를 Item 엔티티로 변환합니다.
+     * @return
+     */
+    public Item createItem(){
         return modelMapper.map(this, Item.class);
     }
 
-    // Item 엔티티를 받아서 ItemFormDto로 변환
+    // DB에서 가져온 Item 엔티티를 받아서 ItemFormDto로 변환
     public static ItemFormDto of(Item item){
         return modelMapper.map(item, ItemFormDto.class);
     }

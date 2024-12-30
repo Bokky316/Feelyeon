@@ -20,6 +20,11 @@ import org.thymeleaf.util.StringUtils;
 import java.time.LocalDateTime;
 import java.util.List;
 
+/**
+ * ItemRepositoryCustom interface 구현하는 클래스
+ * - querydsl을 사용하여 동적으로 쿼리를 생성하기 위한 메서드를 구현한다.
+ * - BooleanExpression : querydsl의 조건을 표현하는 인터페이스, where 조건을 만듬.
+ */
 public class ItemRepositoryCustomImpl implements ItemRepositoryCustom{
 
     // 동적으로 쿼리를 생성하기 위해 JPAQueryFactory를 사용한다.
@@ -71,12 +76,22 @@ public class ItemRepositoryCustomImpl implements ItemRepositoryCustom{
         return StringUtils.isEmpty(searchQuery) ? null : QItem.item.itemNm.like("%" + searchQuery + "%");
     }
 
+    /**
+     * 관리자 페이지에서 상품 목록을 조회하기 위한 메서드
+     * 검색 조건을 기반으로 QueryDSL을 사용하여 동적으로 쿼리를 실행하고,
+     * 조회된 상품 목록을 페이징 처리하여 반환
+     * @param itemSearchDto
+     * @param pageable
+     * @return
+     */
     @Override
     public Page<Item> getAdminItemPage(ItemSearchDto itemSearchDto, Pageable pageable) {
-
+        // quertFactory : 동적으로 쿼리를 만들 수 있는 쿼리 객체를 생성
+        // QuertyResults : querydsl의 페이징 처리를 위한 클래스로  fetchResults()메서드를 통해
+        // 조회된 데이터와 전체 데이터 수를 가져온다.
         QueryResults<Item> results = queryFactory
-                .selectFrom(QItem.item)
-                .where(regDtsAfter(itemSearchDto.getSearchDateType()),
+                .selectFrom(QItem.item) // selectFrom() : 어떤 엔티티를 조회할지 지정(QItem.item)
+                .where(regDtsAfter(itemSearchDto.getSearchDateType()), // regDtsAfter() : 상품 등록일 검색 조건
                         searchSellStatusEq(itemSearchDto.getSearchSellStatus()),
                         searchByLike(itemSearchDto.getSearchBy(),
                                 itemSearchDto.getSearchQuery()))
@@ -86,13 +101,14 @@ public class ItemRepositoryCustomImpl implements ItemRepositoryCustom{
                 .fetchResults();
 
         List<Item> content = results.getResults();  // 조회된 데이터 즉, content
-        long total = results.getTotal();        // 전체 데이터 수 즉, total
+        long total = results.getTotal();        // 전체 데이터 수 즉, total(위 조회 조건에 합당한 전체건수)
 
         // contest : 조회된 데이터
         // total : 전체 데이터 수
         // pageable : 페이지 정보
         return new PageImpl<>(content, pageable, total);
     }
+
 
     /**
      * 메인 페이지에 상품 목록을 조회하는 메서드
@@ -133,8 +149,8 @@ public class ItemRepositoryCustomImpl implements ItemRepositoryCustom{
                 .fetch();   // 조회 결과를 반환한다.
 
         /*
-            * 3. 전체 데이터 수를 조회한다.
-            * Wildcard : QueryDSL에서 전체 데이터 개수를 세기 위한 객체.
+         * 3. 전체 데이터 수를 조회한다.
+         * Wildcard : QueryDSL에서 전체 데이터 개수를 세기 위한 객체.
          */
         long total = queryFactory
                 .select(Wildcard.count)
@@ -149,6 +165,5 @@ public class ItemRepositoryCustomImpl implements ItemRepositoryCustom{
         // - 조회된 콘텐츠와 전체 데이터 수를 사용해 PageImpl 객체 생성
         return new PageImpl<>(content, pageable, total);
     }
-
 
 }

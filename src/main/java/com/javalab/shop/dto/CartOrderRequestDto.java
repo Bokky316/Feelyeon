@@ -5,6 +5,11 @@ import lombok.Setter;
 
 import java.util.List;
 
+/**
+ * 장바구니 주문 요청 DTO
+ * - CartOrderItemDto 리스트를 가지고 있다.
+ *
+ */
 @Getter
 @Setter
 public class CartOrderRequestDto {

@@ -5,7 +5,10 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;
 
-public interface ItemImgRepository extends JpaRepository<ItemImg, Long> {
+/**
+ * 상품 이미지 엔티티에 대한 CRUD Repository 인터페이스
+ */
+public interface ItemImgRepository extends JpaRepository<ItemImg, Long>  {
 
     /**
      * 상품 이미지 조회
