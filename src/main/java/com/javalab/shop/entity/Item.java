@@ -52,6 +52,9 @@ public class Item extends BaseEntity {
     @Enumerated(EnumType.STRING)
     private ItemSellStatus itemSellStatus; // 상품 판매 상태
 
+    @Column(nullable = false)
+    private boolean active; // 아이템 활성화 상태 (true: 활성, false: 비활성)
+
     // LocalDateTime : JPA 2.2부터 지원
     // LocalDateTime : 날짜와 시간을 모두 저장, 밀리 초 단위까지 저장
 //    private LocalDateTime regTime; // 등록시간
@@ -69,6 +72,7 @@ public class Item extends BaseEntity {
         this.stockNumber = itemFormDto.getStockNumber();
         this.itemDetail = itemFormDto.getItemDetail();
         this.itemSellStatus = itemFormDto.getItemSellStatus();
+        this.active = itemFormDto.isActive(); // 활성화 상태 업데이트
     }
 
     /**

@@ -21,6 +21,8 @@ public class QItem extends EntityPathBase<Item> {
 
     public final QBaseEntity _super = new QBaseEntity(this);
 
+    public final BooleanPath active = createBoolean("active");
+
     //inherited
     public final StringPath createdBy = _super.createdBy;
 

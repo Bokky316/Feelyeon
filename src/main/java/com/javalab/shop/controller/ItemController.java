@@ -9,25 +9,28 @@ import com.javalab.shop.service.ItemService;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+
+import java.util.List;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.List;
+
 import java.util.Optional;
 
 @Controller
 @RequiredArgsConstructor
+
 public class ItemController {
 
     private final ItemService itemService;
@@ -130,33 +133,27 @@ public class ItemController {
      * - 상품 등록 페이지에서 입력한 상품 정보를 전달받아 상품을 등록하는 메서드
      */
     @PostMapping("/admin/item/new")
-    public String itemForm(@Valid ItemFormDto itemFormDTO, BindingResult bindingResult,
-                           Model model, @RequestParam("itemImgFile") List<MultipartFile> itemImgFileList){
-
-        if(bindingResult.hasErrors()){
-            return "item/itemForm";
+    public String itemForm(@Valid ItemFormDto itemFormDTO, BindingResult bindingResult, Model model,
+                           @RequestParam("itemImgFile") List<MultipartFile> itemImgFileList) {
+        if (bindingResult.hasErrors()) {
+            return "item/itemForm"; // 입력 오류 시 폼으로 돌아감
         }
-        // 첫번째 상품 이미지가 없고 id가 null인 경우 에러 메시지 전달 즉, 상품 최초 등록인 경우
-        if(itemImgFileList.get(0).isEmpty() && itemFormDTO.getId() == null){
+
+        if (itemImgFileList.get(0).isEmpty() && itemFormDTO.getId() == null) {
             model.addAttribute("errorMessage", "첫번째 상품 이미지는 필수 입력 값 입니다.");
             return "item/itemForm";
         }
 
-        // 첨부 파일이 없는 경우 제외, 파일을 5개 첨부하도록 되어 있지만 실제로 두개만 첨부하면 나머지 3개도 null인 상태로
-        // 전달되므로 null인 파일은 제외시켜벌임 filter로!!  java stream API filter 한다.
-        itemImgFileList = itemImgFileList.stream()
-                .filter(file -> !file.isEmpty())
-                .toList();
-
-        try{
-            itemService.saveItem(itemFormDTO, itemImgFileList);
-        }catch (Exception e){
+        try {
+            itemService.saveItem(itemFormDTO, itemImgFileList); // 상품 저장
+        } catch (Exception e) {
             model.addAttribute("errorMessage", "상품 등록 중 에러가 발생했습니다.");
-            return "item/itemForm";
+            return "item/itemForm"; // 에러 발생 시 폼으로 돌아감
         }
 
-        return "redirect:/";
+        return "redirect:/"; // 성공적으로 등록 후 리다이렉트
     }
+
 
     /**
      * 상품 상세 페이지
@@ -256,4 +253,37 @@ public class ItemController {
         return "item/itemDetail";
     }
 
+    /**
+     * 모든 활성화된 아이템 목록을 조회하는 API.
+     * @return HTTP 응답 상태 200 OK와 함께 활성화된 아이템 리스트 반환
+     */
+    @GetMapping("/active")
+    public ResponseEntity<List<Item>> getActiveItems() {
+        List<Item> activeItems = itemService.getActiveItems(); // 서비스 메서드 호출하여 리스트 조회
+        return ResponseEntity.ok(activeItems); // 활성화된 아이템 목록 반환
+    }
+
+    /**
+     * 특정 ID의 아이템을 활성화하는 API.
+     * @param id 활성화할 아이템의 ID
+     * @return HTTP 응답 상태 200 OK
+     */
+    @PostMapping("/items/{id}/activate")
+    @PreAuthorize("hasRole('ADMIN')")
+    public ResponseEntity<Void> activateItem(@PathVariable Long id) {
+        itemService.activateItem(id);
+        return ResponseEntity.ok().build();
+    }
+
+    /**
+     * 특정 ID의 아이템을 비활성화하는 API.
+     * @param id 비활성화할 아이템의 ID
+     * @return HTTP 응답 상태 200 OK
+     */
+    @PostMapping("/items/{id}/deactivate")
+    @PreAuthorize("hasRole('ADMIN')")
+    public ResponseEntity<Void> deactivateItem(@PathVariable Long id) {
+        itemService.deactivateItem(id);
+        return ResponseEntity.ok().build();
+    }
 }

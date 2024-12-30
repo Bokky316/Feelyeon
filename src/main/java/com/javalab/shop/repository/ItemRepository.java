@@ -61,4 +61,12 @@ public interface ItemRepository extends JpaRepository<Item, Long>, QuerydslPredi
     // - nativeQuery = ture : SQL을 직접 작성하여 실행
     @Query(value="select * from item i where i.item_detail like " + "%:itemDetail% order by i.price desc", nativeQuery = true)
     List<Item> findByItemDetailByNative(@Param("itemDetail") String itemDetail);
+
+
+
+    // 활성화된 아이템만 조회하는 메서드
+    List<Item> findByActiveTrue();
+
+    // 비활성화된 아이템만 조회하는 메서드
+    List<Item> findByActiveFalse();
 }

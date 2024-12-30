@@ -85,4 +85,7 @@ public class ItemFormDto {
         return modelMapper.map(item, ItemFormDto.class);
     }
 
+
+    @Builder.Default
+    private boolean active = true; // 기본적으로 활성화 상태로 설정
 }
