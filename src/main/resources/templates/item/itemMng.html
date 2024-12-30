@@ -2,6 +2,8 @@
 <html xmlns:th="http://www.thymeleaf.org"
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
       layout:decorate="~{layouts/layout1}">
+<meta name="_csrf" th:content="${_csrf.token}"/>
+<meta name="_csrf_header" th:content="${_csrf.headerName}"/>
 
 <th:block layout:fragment="css">
     <link rel="stylesheet" href="/css/item/itemMng.css">
@@ -36,21 +38,27 @@
                 "&searchQuery=" + searchQuery;
         }
 
-        // 아이템 활성화/비활성화 요청 함수
-      function toggleItem(itemId, isActive) {
-        const url = isActive ? `/items/${itemId}/deactivate` : `/items/${itemId}/activate`;
+  function toggleItem(itemId, isActive) {
+            const url = isActive ? `/items/${itemId}/deactivate` : `/items/${itemId}/activate`;
 
-        $.post(url)
-            .done(function() {
-                loadItems(); // 요청 후 아이템 목록 새로고침
-                alert("아이템 상태가 변경되었습니다.");
+            // CSRF 토큰 가져오기
+            const csrfToken = $('input[name="${_csrf.parameterName}"]').val();
+
+            $.ajax({
+                url: url,
+                type: 'POST',
+                beforeSend: function(xhr) {
+                    xhr.setRequestHeader("X-CSRF-TOKEN", $("meta[name='_csrf']").attr("content"));
+                }
             })
-            .fail(function() {
-                alert("아이템 상태 변경에 실패했습니다.");
+            .done(function() {
+                alert("아이템 상태가 변경되었습니다.");
+                location.reload(); // 페이지 새로고침
+            })
+            .fail(function(xhr) {
+                alert("아이템 상태 변경에 실패했습니다: " + xhr.responseText);
             });
-    }
-
-
+        }
     </script>
 </th:block>
 
@@ -88,10 +96,10 @@
                 <td th:text="${#temporals.format(item.regTime, 'yyyy-MM-dd HH:mm:ss')}"></td>
                 <td>
                     <!-- 아이템 활성화/비활성화  -->
-                    <button onclick="toggleItem(${item.id}, ${item.active})">
-                        <!-- 버튼 텍스트 동적 변경 -->
-                        <span th:text="${item.active} ? '비활성화' : '활성화'"></span>
-                    </button>
+                        <button type="button"
+                                th:onclick="'toggleItem(' + ${item.id} + ', ' + ${item.active} + ')'">
+                            <span th:text="${item.active} ? '비활성화' : '활성화'"></span>
+                        </button>
                 </td>
             </tr>
             </tbody>
@@ -143,6 +151,9 @@
             <input th:field="*{searchQuery}" type="text" class="form-control" placeholder="검색어를 입력해주세요.">
             <button id="searchBtn" type="submit" class="btn btn-primary">검색</button>
         </div>
+
+        <!-- CSRF 토큰 -->
+        <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}">
     </form>
 </div>
 <div th:replace="~{fragments/footer::footer}"></div>
