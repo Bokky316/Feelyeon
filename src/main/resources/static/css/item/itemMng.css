@@ -1,8 +1,7 @@
-/* General Styling */
 body {
     margin: 0;
     font-family: 'Nanum Gothic', Arial, sans-serif;
-    background-color: #FAFAF8;
+    background-color: #FAF6ED;
     color: #333;
     margin-top: 100px;
 }
@@ -12,6 +11,21 @@ h1 {
     margin-bottom: 40px;
     text-align: center;
     font-family: "Playfair Display", serif;
+}
+
+.itemFormBtn {
+    background: none;
+    color: black;
+    cursor: pointer;
+    text-align: center;
+    border: none;
+    padding: 10px 20px;
+    font-size: 0.9em;
+    margin-left: 85%;
+}
+
+.itemFormBtn:hover {
+    color: #777162;
 }
 
 table {
@@ -44,7 +58,6 @@ a {
     text-decoration: none;
 }
 
-/* Pagination */
 .pagination {
     display: flex;
     justify-content: center;
@@ -68,8 +81,12 @@ a {
     transition: background-color 0.3s ease, color 0.3s ease;
 }
 
-.pagination .page-link:hover {
-    color: #fff;
+.pagination .prev, .next {
+    cursor: pointer;
+}
+
+.pagination span {
+    color: #5A5957;
 }
 
 .pagination .page-item.active .page-link {

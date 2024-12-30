@@ -18,22 +18,22 @@
     <h1>Write Your Story with Us</h1>
     <form th:action="@{/members/new}" role="form" method="post"  th:object="${memberFormDto}">
       <div class="form-group nameForm">
-        <label th:for="name">Name</label>
+        <label th:for="name">Name <img src="//img.echosting.cafe24.com/skin/base/common/ico_required.gif" alt="필수"/></label>
         <input type="text" th:field="*{name}" class="form-control" placeholder="이름을 입력해주세요.">
         <p th:if="${#fields.hasErrors('name')}" th:errors="*{name}" class="fieldError">Incorrect data</p>
       </div>
       <div class="form-group emailForm">
-        <label th:for="email">Email</label>
+        <label th:for="email">Email <img src="//img.echosting.cafe24.com/skin/base/common/ico_required.gif" alt="필수"/></label>
         <input type="email" th:field="*{email}" class="form-control" placeholder="이메일을 입력해주세요.">
         <p th:if="${#fields.hasErrors('email')}" th:errors="*{email}" class="fieldError">Incorrect data</p>
       </div>
       <div class="form-group pwdForm">
-        <label th:for="password">Password</label>
+        <label th:for="password">Password <img src="//img.echosting.cafe24.com/skin/base/common/ico_required.gif" alt="필수"/></label>
         <input type="password" th:field="*{password}" class="form-control" placeholder="비밀번호를 입력해주세요. (4자 이상 16자 이하)">
         <p th:if="${#fields.hasErrors('password')}" th:errors="*{password}" class="fieldError">Incorrect data</p>
       </div>
       <div class="form-group addrForm">
-        <label th:for="address">Address</label>
+        <label th:for="address">Address <img src="//img.echosting.cafe24.com/skin/base/common/ico_required.gif" alt="필수"/></label>
         <input type="text" th:field="*{address}" class="form-control" placeholder="주소를 입력해주세요.">
         <p th:if="${#fields.hasErrors('address')}" th:errors="*{address}" class="fieldError">Incorrect data</p>
       </div>

@@ -19,7 +19,9 @@
     <div th:replace="~{fragments/header_bg::header_bg}"></div>
 
     <h1>Product Management</h1>
+
     <form th:action="@{'/admin/items/' + ${items.number}}" role="form" method="get" th:object="${items}">
+        <button type="button" th:onclick="|location.href='@{/admin/item/new}';|" class="itemFormBtn">상품등록</button>
         <table class="table">
             <thead>
             <tr>
@@ -46,8 +48,8 @@
         <div th:with="start=${(items.number/maxPage)*maxPage + 1}, end=(${(items.totalPages == 0) ? 1 : (start + (maxPage - 1) < items.totalPages ? start + (maxPage - 1) : items.totalPages)})" >
             <ul class="pagination justify-content-center">
                 <li class="page-item" th:classappend="${items.first}?'disabled'">
-                    <a th:onclick="'javascript:page(' + ${items.number - 1} + ')'" aria-label='Previous' class="page-link">
-                        <span aria-hidden='true' class="prev">이전</span>
+                    <a th:onclick="'javascript:page(' + ${items.number - 1} + ')'" aria-label='Previous' class="page-link prev">
+                        <span aria-hidden='true'>이전</span>
                     </a>
                 </li>
 
@@ -56,11 +58,10 @@
                 </li>
 
                 <li class="page-item" th:classappend="${items.last}?'disabled'">
-                    <a th:onclick="'javascript:page(' + ${items.number + 1} + ')'" aria-label='Next' class="page-link">
-                        <span aria-hidden='true' class="next">다음</span>
+                    <a th:onclick="'javascript:page(' + ${items.number + 1} + ')'" aria-label='Next' class="page-link next">
+                        <span aria-hidden='true'>다음</span>
                     </a>
                 </li>
-
             </ul>
         </div>
 
