@@ -1,7 +1,7 @@
 @charset "UTF-8";
 body {
     font-family: Arial, sans-serif;
-    background-color: white;
+    background-color: #FBFAF8;
     color: #333;
     margin: 0;
     padding-top: 120px;
@@ -17,9 +17,10 @@ h1 {
     font-family: "Playfair Display", serif;
     text-align: center;
     padding-top: 40px;
-    padding-bottom: 10px;
-    font-size: 3em;
+    padding-bottom: 20px;
+    font-size: 2.7em;
     color: black;
+    font-style: italic;
 }
 
 .form-group {
@@ -31,17 +32,23 @@ h1 {
     font-family: "Playfair Display", serif;
     font-size: 1.2em;
     font-weight: bold;
-    margin-bottom: 10px;
+    margin-bottom: 5px;
     width: 100%;
     text-align: left;
+}
+
+.form-group label img {
+    padding-bottom: 5px;
+    padding-left: 5px;
 }
 
 .form-control {
     width: 95%;
     padding: 10px;
     font-size: 14px;
-    border: 1px solid #ddd;
-    background-color: #f4f4f4;
+    background: #FBFAF8;
+    border: none;
+    border-bottom: 2px solid #C5C0B4;
     cursor: pointer;
 }
 
@@ -71,6 +78,7 @@ button[type="submit"] {
 
 button[type="submit"]:hover {
     background-color: #444;
+    border: 1px solid #444;
 }
 
 button[type="button"] {

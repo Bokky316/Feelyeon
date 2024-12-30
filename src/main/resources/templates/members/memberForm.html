@@ -4,9 +4,9 @@
   <meta charset="UTF-8">
   <title>필연 : 必然 - 회원가입</title>
   <th:block layout:fragment="css">
-    <link rel="stylesheet" href="/css/header.css">
-    <link rel="stylesheet" href="/css/footer.css">
-    <link rel="stylesheet" href="/css/signUp.css">
+    <link rel="stylesheet" href="/css/common/header.css">
+    <link rel="stylesheet" href="/css/common/footer.css">
+    <link rel="stylesheet" href="/css/member/memberForm.css">
     <link rel="icon" href="/static-images/favicon.png" type="image/png">
     <link href="https://fonts.googleapis.com/css2?family=Nanum+Gothic&family=Playfair+Display:ital,wght@0,400..900;1,400..900&display=swap" rel="stylesheet">
   </th:block>
@@ -17,27 +17,25 @@
   <div class="signUpForm">
     <h1>Write Your Story with Us</h1>
     <form th:action="@{/members/new}" role="form" method="post"  th:object="${memberFormDto}">
-      <hr style="border: 1px solid black; margin-bottom: 25px;">
       <div class="form-group nameForm">
-        <label th:for="name">Name</label>
+        <label th:for="name">Name <img src="//img.echosting.cafe24.com/skin/base/common/ico_required.gif" alt="필수"/></label>
         <input type="text" th:field="*{name}" class="form-control" placeholder="이름을 입력해주세요.">
         <p th:if="${#fields.hasErrors('name')}" th:errors="*{name}" class="fieldError">Incorrect data</p>
       </div>
       <div class="form-group emailForm">
-        <label th:for="email">Email</label>
+        <label th:for="email">Email <img src="//img.echosting.cafe24.com/skin/base/common/ico_required.gif" alt="필수"/></label>
         <input type="email" th:field="*{email}" class="form-control" placeholder="이메일을 입력해주세요.">
         <p th:if="${#fields.hasErrors('email')}" th:errors="*{email}" class="fieldError">Incorrect data</p>
       </div>
       <div class="form-group pwdForm">
-        <label th:for="password">Password</label>
+        <label th:for="password">Password <img src="//img.echosting.cafe24.com/skin/base/common/ico_required.gif" alt="필수"/></label>
         <input type="password" th:field="*{password}" class="form-control" placeholder="비밀번호를 입력해주세요. (4자 이상 16자 이하)">
         <p th:if="${#fields.hasErrors('password')}" th:errors="*{password}" class="fieldError">Incorrect data</p>
       </div>
       <div class="form-group addrForm">
-        <label th:for="address">Address</label>
+        <label th:for="address">Address <img src="//img.echosting.cafe24.com/skin/base/common/ico_required.gif" alt="필수"/></label>
         <input type="text" th:field="*{address}" class="form-control" placeholder="주소를 입력해주세요.">
         <p th:if="${#fields.hasErrors('address')}" th:errors="*{address}" class="fieldError">Incorrect data</p>
-        <hr style="border: 1px solid black; margin-top: 50px; margin-bottom: 10px;">
       </div>
       <div style="text-align: center">
         <button type="submit" class="btn btn-primary">Sign Up</button>
