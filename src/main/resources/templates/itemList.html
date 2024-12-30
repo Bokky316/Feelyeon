@@ -20,6 +20,7 @@
     <div th:replace="~{fragments/header_bg::header_bg}"></div>
 
     <main>
+        <div id="itemList">
         <table border="1">
             <thead>
             <tr>
@@ -50,7 +51,6 @@
                     <!--경로 변수로 값을 전달할 때는 인코딩 필요 /view/{id}(id=달러{item.id})-->
                     <a th:href="@{/view/{id}(id=${item.id})}" th:text="${item.itemNm}"></a>
                 </td>
-
                 <td th:text="${item.price}"></td>
                 <td th:text="${item.stockNumber}"></td>
                 <td th:text="${item.itemDetail}"></td>
@@ -59,12 +59,14 @@
             </tr>
             </tbody>
         </table>
+        </div>
     </main>
 
     <div th:replace="~{fragments/footer::footer}"></div>
 
     <th:block layout:fragment="script">
         <script src="/js/adminBtn.js"></script>
+
     </th:block>
 </body>
 </html>

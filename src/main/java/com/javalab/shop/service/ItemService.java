@@ -10,6 +10,7 @@ import jakarta.persistence.EntityNotFoundException;
 import com.javalab.shop.repository.ItemImgRepository;
 import com.javalab.shop.repository.ItemRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -18,6 +19,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @Transactional
@@ -35,6 +37,7 @@ public class ItemService {
         // 1. 상품 등록, 저장(영속화)
         // 1.1. ItemFormDto의 crateItem() 메소드를 통해 Item 객체 생성(Dto -> Entity)
         Item item = itemFormDto.createItem();
+        item.setActive(itemFormDto.isActive()); // 활성화 상태 설정
         // 1.2. ItemRepository의 save() 메소드를 통해 Item 객체 저장
         // save(item) : JPA의 ENtityManager가 persist(item) 메소드 호출해서 해당 엔티티를 영속화
         // item 엔티티가 데이터베이스에 저장되고 기본키를 발급받아서 그 기본키로 영속성 컨텍스트에 저장됨
@@ -136,5 +139,38 @@ public class ItemService {
     @Transactional(readOnly = true)
     public Page<MainItemDto> getMainItemPage(ItemSearchDto itemSearchDto, Pageable pageable){
         return itemRepository.getMainItemPage(itemSearchDto, pageable);
+    }
+
+    // 활성화된 아이템 목록 조회
+    @Transactional(readOnly = true)
+    public Page<Item> getActiveItems(ItemSearchDto itemSearchDto, Pageable pageable) {
+        return itemRepository.findByActiveTrue(pageable); // active가 true인 아이템 조회
+    }
+
+
+
+
+    /**
+     * 특정 ID의 아이템을 활성화하는 메서드.
+     * @param id 활성화할 아이템의 ID
+     */
+    public void activateItem(Long id) {
+        Optional<Item> item = itemRepository.findById(id); // ID로 아이템 조회
+        item.ifPresent(i -> {
+            i.setActive(true); // 활성 상태로 변경
+            itemRepository.save(i); // 변경된 아이템 저장
+        });
+    }
+
+    /**
+     * 특정 ID의 아이템을 비활성화하는 메서드.
+     * @param id 비활성화할 아이템의 ID
+     */
+    public void deactivateItem(Long id) {
+        Optional<Item> item = itemRepository.findById(id); // ID로 아이템 조회
+        item.ifPresent(i -> {
+            i.setActive(false); // 비활성 상태로 변경
+            itemRepository.save(i); // 변경된 아이템 저장
+        });
     }
 }

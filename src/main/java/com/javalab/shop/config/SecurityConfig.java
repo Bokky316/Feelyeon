@@ -85,7 +85,9 @@ public class SecurityConfig {
                 .requestMatchers("/images/**", "/static-images/**", "/css/**", "/favicon.ico", "/error", "/img/**").permitAll()// 여기 설정된 정적리소스 URL은 인증 없이 접근 가능, 에러를 안하면 무한 리디렉트함, 파비콘=아이콘임
                 .requestMatchers("/", "/members/**").permitAll() // /, /member/** URL은 인증 없이 접근 가능
                 .requestMatchers("/admin/**").hasRole("ADMIN") // /admin/** URL은 ADMIN 권한을 가진 사용자만 접근 가능
+                .requestMatchers("/", "/members/**", "/items/**").permitAll()
                 .anyRequest().authenticated()); // 그 외의 URL은 인증된 사용자만 접근 가능
+
 
         // 인증 실패 시 처리할 핸들러를 설정
         // 권한이 없는 페이지에 접근 시 처리할 핸들러

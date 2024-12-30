@@ -1,6 +1,9 @@
 package com.javalab.shop.repository;
 
+import com.javalab.shop.dto.ItemSearchDto;
 import com.javalab.shop.entity.Item;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.querydsl.QuerydslPredicateExecutor;
@@ -61,4 +64,15 @@ public interface ItemRepository extends JpaRepository<Item, Long>, QuerydslPredi
     // - nativeQuery = ture : SQL을 직접 작성하여 실행
     @Query(value="select * from item i where i.item_detail like " + "%:itemDetail% order by i.price desc", nativeQuery = true)
     List<Item> findByItemDetailByNative(@Param("itemDetail") String itemDetail);
+
+
+
+    // 활성화된 아이템만 조회하는 메서드
+    List<Item> findByActiveTrue();
+
+    // 비활성화된 아이템만 조회하는 메서드
+    List<Item> findByActiveFalse();
+
+    // 활성화된 아이템과 검색 조건에 맞는 페이징 처리 메서드 추가
+    Page<Item> findByActiveTrue(Pageable pageable);
 }

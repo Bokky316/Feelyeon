@@ -32,4 +32,6 @@ public class ItemDto {
     private ItemSellStatus itemSellStatus; // 상품 판매 상태
     private LocalDateTime regTime; // 등록시간
     private LocalDateTime updateTime; // 수정시간
+    @Builder.Default
+    private boolean active = true; // 기본적으로 활성화 상태로 설정
 }
