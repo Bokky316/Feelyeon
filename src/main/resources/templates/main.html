@@ -16,12 +16,6 @@
 <body>
     <div th:replace="~{fragments/header::header}"></div>
 
-    <!-- ===========================================
-                          수정사항
-            배너 이미지가 네 번째 이미지 이후로 넘어가면
-            초기화가 아니라 흰 배경으로 보여짐.
-         ===========================================
-    -->
     <!-- banner -->
     <div id="carouselControls" class="carousel slide margin" data-ride="carousel">
     <div class="slider-container">
@@ -198,7 +192,7 @@
             </li>
 
             <!-- 페이지 번호 생성 및 표시 -->
-            <li class="page-item" th:each="page: ${#numbers.sequence(start, end)}" th:classappend="${items.number eq page-1}?'active':''">
+            <li class="page-item page-number" th:each="page: ${#numbers.sequence(start, end)}" th:classappend="${items.number eq page-1}?'active':''">
                 <a th:href="@{'/' +'?searchQuery=' + ${itemSearchDto.searchQuery} + '&page=' + ${page-1}}" th:inline="text" class="page-link">[[${page}]]</a>
             </li>
 

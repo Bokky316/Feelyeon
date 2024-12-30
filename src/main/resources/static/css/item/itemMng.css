@@ -13,7 +13,12 @@ h1 {
     font-family: "Playfair Display", serif;
 }
 
-.itemFormBtn {
+.btn-wrap {
+    margin-top: 80px;
+    margin-left: 10%;
+}
+
+.btn-primary {
     background: none;
     color: black;
     cursor: pointer;
@@ -21,10 +26,9 @@ h1 {
     border: none;
     padding: 10px 20px;
     font-size: 0.9em;
-    margin-left: 85%;
 }
 
-.itemFormBtn:hover {
+.btn-primary:hover {
     color: #777162;
 }
 
@@ -145,6 +149,11 @@ a {
     font-weight: bold;
 }
 
-.table a:hover {
-    color: #BAA69F;
+td button {
+    background-color: black;
+    border: 1px solid black;
+    border-radius: 4px;
+    color: white;
+    padding: 5px 10px;
+    cursor: pointer;
 }

@@ -143,3 +143,15 @@ textarea.form-control:focus {
     color: red;
     font-size: 0.9rem;
 }
+
+.activeBtn {
+    background: none;
+    border: none;
+    padding: 5px 10px;
+    font-size: 1em;
+    cursor: pointer;
+}
+
+.activeBtn:hover {
+    color: #777162;
+}

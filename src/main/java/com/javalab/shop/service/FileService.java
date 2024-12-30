@@ -5,6 +5,7 @@ import org.springframework.stereotype.Service;
 
 import java.io.File;
 import java.io.FileOutputStream;
+import java.io.IOException;
 import java.util.UUID;
 
 /**
@@ -17,47 +18,60 @@ public class FileService {
 
     /**
      * 파일 업로드
-     * @param uploadPath    : 파일 업로드 경로
-     * @param originalFileName : 업로드할 파일의 원본 파일명
-     * @param fileData : 업로드할 파일의 데이터
-     * @return
-     * @throws Exception
+     * @param uploadPath - 파일이 업로드될 디렉토리 경로
+     * @param originalFileName - 원본 파일 이름
+     * @param fileData - 업로드할 파일의 데이터
+     * @return 업로드된 파일의 이름
+     * @throws IOException - 파일 업로드 중 발생할 수 있는 예외
      */
     public String uploadFile(String uploadPath, String originalFileName,
-                             byte[] fileData) throws Exception{
+                             byte[] fileData) throws IOException {
 
-        // 1. 파일명이 중복되지 않도록 UUID를 이용하여 파일명 생성
+        // 파일 이름에 UUID를 추가하여 중복되지 않는 이름 생성
         UUID uuid = UUID.randomUUID();
-        // 2. 파일명의 확장자를 추출
         String extension = originalFileName.substring(originalFileName.lastIndexOf("."));
-        // 3. 파일명 생성(uuid + 확장자)
         String saveFileName = uuid.toString() + extension;
-        // 4. 파일 업로드 경로 + 파일명, 이렇게 만든 경로로 파일을 객체 생성
+
+        // 파일이 저장될 전체 경로
         String fileUploadFullUrl = uploadPath + "/" + saveFileName;
-        // 5. 파일 객체를 생성하여 파일을 업로드할 수 있는 출력 스트림을 생성
-        FileOutputStream fos = new FileOutputStream(fileUploadFullUrl);
-        // 6. 파일 데이터를 출력 스트림을 이용하여 파일에 기록
-        fos.write(fileData);
-        fos.close();
-        // 7. 파일명을 반환
-        return saveFileName;
+
+        // 디렉토리 존재 여부 확인 후 없으면 디렉토리 생성
+        File targetDir = new File(uploadPath);
+        if (!targetDir.exists()) {
+            targetDir.mkdirs(); // 경로가 없으면 폴더를 생성
+        }
+
+        // 파일 업로드
+        try (FileOutputStream fos = new FileOutputStream(fileUploadFullUrl)) {
+            fos.write(fileData);  // 파일을 지정된 경로에 저장
+            log.info("파일 업로드 성공: {}", fileUploadFullUrl);
+        } catch (IOException e) {
+            log.error("파일 업로드 중 오류가 발생했습니다: {}", e.getMessage());
+            throw e;  // 예외를 던져 상위 메서드에서 처리하도록 함
+        }
+
+        return saveFileName;  // 저장된 파일 이름 반환
     }
 
     /**
      * 파일 삭제
      * - 파일을 삭제하는 메서드
-     * - 여기서 파일은 파일 시스템인가? DB인가? 파일 시스템
-     * @param filePath
-     * @throws Exception
+     * @param filePath - 삭제할 파일의 경로
+     * @throws IOException - 파일 삭제 중 발생할 수 있는 예외
      */
-    public void deleteFile(String filePath) throws  Exception{
+    public void deleteFile(String filePath) throws IOException {
+
         File deleteFile = new File(filePath);
 
-        if(deleteFile.exists()){
-            deleteFile.delete();
-            log.info("파일을 삭제하였습니다.");
-        }else{
-            log.info("파일이 존재하지 않습니다.");
+        // 파일이 존재하면 삭제
+        if (deleteFile.exists()) {
+            if (deleteFile.delete()) {
+                log.info("파일 삭제 성공: {}", filePath);
+            } else {
+                log.error("파일 삭제 실패: {}", filePath);
+            }
+        } else {
+            log.info("파일이 존재하지 않음: {}", filePath);
         }
     }
 }

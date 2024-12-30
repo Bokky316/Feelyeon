@@ -1,68 +1,22 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org"
-      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-      layout:decorate="~{layouts/layout1}">
-<meta name="_csrf" th:content="${_csrf.token}"/>
-<meta name="_csrf_header" th:content="${_csrf.headerName}"/>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta name="_csrf" th:content="${_csrf.token}"/>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>필연 : 必然 - 상품 등록</title>
 
-<!-- 사용자 CSS 추가 -->
-<th:block layout:fragment="css">
-    <link rel="stylesheet" href="/css/item/itemForm.css">
-
-</th:block>
-
-<th:block layout:fragment="script">
-    <script th:inline="javascript">
-        $(document).ready(function(){
-            var errorMessage = [[${errorMessage}]];
-            if(errorMessage != null){
-                alert(errorMessage);
-            }
-            bindDomEvent();
-        });
-
-        function bindDomEvent(){
-            $(".custom-file-input").on("change", function() {
-                var fileName = $(this).val().split("\\").pop();  // 이미지 파일명
-                var fileExt = fileName.substring(fileName.lastIndexOf(".")+1).toLowerCase(); // 확장자 추출
-
-                if(fileExt != "jpg" && fileExt != "jpeg" && fileExt != "gif" && fileExt != "png" && fileExt != "bmp"){
-                    alert("이미지 파일만 등록이 가능합니다.");
-                    return;
-                }
-
-                $(this).siblings(".custom-file-label").html(fileName); // 파일명을 label에 출력
-            });
-        }
-
-function toggleItem(itemId, isActive) {
-    const url = isActive ? `/items/${itemId}/deactivate` : `/items/${itemId}/activate`;
-
-    // CSRF 토큰 가져오기
-    const csrfToken = $('input[name="${_csrf.parameterName}"]').val();
-
-    $.ajax({
-        url: url,
-        type: 'POST',
-        beforeSend: function(xhr) {
-            xhr.setRequestHeader("X-CSRF-TOKEN", $("meta[name='_csrf']").attr("content"));
-        }
-    })
-   .done(function() {
-        alert("아이템 상태가 변경되었습니다.");
-        location.reload(); // 페이지 새로고침
-    })
-    .fail(function(xhr) {
-        alert("아이템 상태 변경에 실패했습니다: " + xhr.responseText);
-    });
-}
-    </script>
-
-</th:block>
-
+    <th:block layout:fragment="css">
+        <link rel="stylesheet" href="/css/item/itemForm.css">
+        <link href="/css/common/header_bg.css" rel="stylesheet">
+        <link href="/css/common/footer.css" rel="stylesheet">
+        <link rel="icon" href="/static-images/favicon.png" type="image/png">
+        <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+        <link href="https://fonts.googleapis.com/css2?family=Nanum+Gothic&family=Playfair+Display:ital,wght@0,400..900;1,400..900&display=swap" rel="stylesheet">
+    </th:block>
+</head>
+<body>
 <div th:replace="~{fragments/header_bg::header_bg}"></div>
-
-<div layout:fragment="content">
 
     <form role="form" method="post" enctype="multipart/form-data" th:object="${itemFormDto}">
 
@@ -142,7 +96,7 @@ function toggleItem(itemId, isActive) {
         <div style="text-align: center; margin-top: 20px;">
             <button type="button"
                     th:onclick="'toggleItem(' + ${itemFormDto.id} + ', ' + ${itemFormDto.active} + ')'"
-                    class="btn btn-primary">
+                    class="activeBtn">
                 <span th:text="${itemFormDto.active} ? '비활성화' : '활성화'"></span>
             </button>
         </div>
@@ -150,6 +104,54 @@ function toggleItem(itemId, isActive) {
         <!-- CSRF 토큰 -->
         <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}">
     </form>
-</div>
 
+    <th:block layout:fragment="script">
+        <script src="/js/adminBtn.js"></script>
+        <script th:inline="javascript">
+            $(document).ready(function(){
+                var errorMessage = [[${errorMessage}]];
+                if(errorMessage != null){
+                    alert(errorMessage);
+                }
+                bindDomEvent();
+            });
+
+            function bindDomEvent(){
+                $(".custom-file-input").on("change", function() {
+                    var fileName = $(this).val().split("\\").pop();  // 이미지 파일명
+                    var fileExt = fileName.substring(fileName.lastIndexOf(".")+1).toLowerCase(); // 확장자 추출
+
+                    if(fileExt != "jpg" && fileExt != "jpeg" && fileExt != "gif" && fileExt != "png" && fileExt != "bmp"){
+                        alert("이미지 파일만 등록이 가능합니다.");
+                        return;
+                    }
+
+                    $(this).siblings(".custom-file-label").html(fileName); // 파일명을 label에 출력
+                });
+            }
+
+            function toggleItem(itemId, isActive) {
+                const url = isActive ? `/items/${itemId}/deactivate` : `/items/${itemId}/activate`;
+
+                // CSRF 토큰 가져오기
+                const csrfToken = $('input[name="${_csrf.parameterName}"]').val();
+
+                $.ajax({
+                    url: url,
+                    type: 'POST',
+                    beforeSend: function(xhr) {
+                        xhr.setRequestHeader("X-CSRF-TOKEN", $("meta[name='_csrf']").attr("content"));
+                    }
+                })
+               .done(function() {
+                    alert("아이템 상태가 변경되었습니다.");
+                    location.reload(); // 페이지 새로고침
+                })
+                .fail(function(xhr) {
+                    alert("아이템 상태 변경에 실패했습니다: " + xhr.responseText);
+                });
+            }
+        </script>
+    </th:block>
+</body>
 </html>
