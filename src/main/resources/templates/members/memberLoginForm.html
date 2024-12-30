@@ -34,8 +34,9 @@
         <a th:href="@{/members/new}" class="signup-link">SIGN UP</a>
         <!-- 소셜 로그인 버튼 -->
         <div class="social-login">
-          <p>소셜 계정으로 로그인:</p>
-          <a th:href="@{/oauth2/authorization/kakao}" class="btn btn-warning">카카오로 로그인</a>
+          <a th:href="@{/oauth2/authorization/kakao}" class="btn kakaoBtn">
+            <img src="/static-images/kakao_login.png" alt="카카오 로그인" style="cursor: pointer;">
+          </a>
         </div>
       </form>
     </div>

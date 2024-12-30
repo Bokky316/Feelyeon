@@ -90,3 +90,7 @@ body {
 .signup-link:hover {
     color: black;
 }
+
+.social-login img {
+    width: 100%;
+}
