@@ -43,39 +43,26 @@
             <p class="h3 font-weight-bold" th:text="${itemSearchDto.searchQuery} + '검색 결과'"></p>
         </div>
 
-        <div class="row">
-            <!-- items의 내용을 반복하여 각 아이템을 카드 형태로 표시 -->
-            <th:block th:each="item, status: ${items.getContent()}">
-                <div class="products-section section1">
-                    <div class="item product1">
-                        <!-- 아이템 상세 페이지로 링크를 설정 -->
-                        <a th:href="'/item/' +${item.id}" class="text-dark">
-                            <!-- 아이템 이미지 표시 -->
-                            <img th:src="${item.imgUrl}" class="card-img-top" th:alt="${item.itemNm}" height="400">
-                            <div class="view-button"><i class="fas fa-search"></i> VIEW DETAILS</div>
-                            <div class="product-info">
-                                <h3 class="product-name">[[${item.itemNm}]]</h3>
-                                <p class="card-text">[[${item.itemDetail}]]</p>
-                                <p class="product-price">[[${item.price}]]원</p>
-                            </div>
-                        </a>
-                    </div>
-                </div>
-            </th:block>
-        </div>
         <!-- 첫 번째 줄 -->
         <div class="products-section section1">
-            <div class="item product1">
-                <a href="/상품상세페이지">
-                    <img th:src="@{/static-images/product/011.png}">
-                    <div class="view-button"><i class="fas fa-search"></i> VIEW DETAILS</div>
-                </a>
-                <div class="product-info">
-                    <h3 class="product-name">애니멀 연필깎이 - 코끼리<br>Animal Sharpener Rice Resin - Elephant</h3>
-                    <p class="product-price">5,500원</p>
+
+            <!-- items의 내용을 반복하여 각 아이템을 카드 형태로 표시 -->
+            <th:block th:each="item, status: ${items.getContent()}">
+                <div class="item product1">
+                    <!-- 아이템 상세 페이지로 링크를 설정 -->
+                    <a th:href="@{/item/{itemId}(itemId=${item.id})}" class="text-dark">
+                        <!-- 아이템 이미지 표시 -->
+                        <img th:src="${item.imgUrl}" class="card-img-top" th:alt="${item.itemNm}" height="400">
+                        <div class="view-button"><i class="fas fa-search"></i> VIEW DETAILS</div>
+                        <div class="product-info">
+                            <h3 class="product-name">[[${item.itemNm}]]</h3>
+                            <p class="card-text">[[${item.itemDetail}]]</p>
+                            <p class="product-price">[[${item.price}]]원</p>
+                        </div>
+                    </a>
                 </div>
-            </div>
-    
+            </th:block>
+
             <div class="item product2">
                 <a href="/상품상세페이지">
                     <img th:src="@{/static-images/product/013.png}">
