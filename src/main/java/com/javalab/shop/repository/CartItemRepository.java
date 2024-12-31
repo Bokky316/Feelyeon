@@ -17,6 +17,7 @@ public interface CartItemRepository extends JpaRepository<CartItem, Long> {
 
     /**
      * 장바구니에 담긴 상품을 조회하는 메서드
+     *
      * @param cartId
      * @param itemId
      */
@@ -38,6 +39,7 @@ public interface CartItemRepository extends JpaRepository<CartItem, Long> {
             "where ci.cart.id = :cartId " +
             "and im.item.id = ci.item.id " +
             "and im.repimgYn = 'Y' " +
+            "and i.active = true " +  // 활성화된 아이템만 조회
             "order by ci.regTime desc"
     )
     List<CartDetailDto> findCartDetailDtoList(@Param("cartId") Long cartId);
