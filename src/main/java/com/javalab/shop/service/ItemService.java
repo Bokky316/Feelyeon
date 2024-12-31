@@ -141,6 +141,7 @@ public class ItemService {
         return itemRepository.getMainItemPage(itemSearchDto, pageable);
     }
 
+
     // 활성화된 아이템 목록 조회
     @Transactional(readOnly = true)
     public Page<Item> getActiveItems(ItemSearchDto itemSearchDto, Pageable pageable) {
