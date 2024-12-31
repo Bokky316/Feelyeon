@@ -53,13 +53,12 @@
                     <a th:href="@{/item/{itemId}(itemId=${item.id})}" class="text-dark">
                         <!-- 아이템 이미지 표시 -->
                         <img th:src="${item.imgUrl}" class="card-img-top" th:alt="${item.itemNm}" height="400">
+                    </a>
                         <div class="view-button"><i class="fas fa-search"></i> VIEW DETAILS</div>
                         <div class="product-info">
                             <h3 class="product-name">[[${item.itemNm}]]</h3>
-                            <p class="card-text">[[${item.itemDetail}]]</p>
                             <p class="product-price">[[${item.price}]]원</p>
                         </div>
-                    </a>
                 </div>
             </th:block>
 
