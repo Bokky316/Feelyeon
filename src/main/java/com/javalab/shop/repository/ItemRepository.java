@@ -1,6 +1,7 @@
 package com.javalab.shop.repository;
 
 import com.javalab.shop.dto.ItemSearchDto;
+import com.javalab.shop.dto.MainItemDto;
 import com.javalab.shop.entity.Item;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -75,4 +76,6 @@ public interface ItemRepository extends JpaRepository<Item, Long>, QuerydslPredi
 
     // 활성화된 아이템과 검색 조건에 맞는 페이징 처리 메서드 추가
     Page<Item> findByActiveTrue(Pageable pageable);
+
+
 }

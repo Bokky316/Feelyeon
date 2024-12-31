@@ -142,6 +142,7 @@ public class ItemRepositoryCustomImpl implements ItemRepositoryCustom{
                 .from(itemImg)  // itemImg 테이블을 기준으로 조회한다.
                 .join(itemImg.item, item)   // itemImg 테이블과 item 테이블을 조인한다.
                 .where(itemImg.repimgYn.eq("Y"))        // 대표 이미지만 조회한다.
+                .where(item.active.eq(true))  // 활성화된 아이템만 조회
                 .where(itemNmLike(itemSearchDto.getSearchQuery()))  // 상품명 검색 조건을 적용한다.
                 .orderBy(item.id.desc())    // 상품 번호를 기준으로 내림차순 정렬한다.
                 .offset(pageable.getOffset())   // 페이지 시작 위치를 설정한다.
@@ -157,6 +158,7 @@ public class ItemRepositoryCustomImpl implements ItemRepositoryCustom{
                 .from(itemImg)
                 .join(itemImg.item, item)
                 .where(itemImg.repimgYn.eq("Y"))
+                .where(item.active.eq(true))  // 활성화된 아이템만 조회
                 .where(itemNmLike(itemSearchDto.getSearchQuery()))
                 .fetchOne()
                 ;
