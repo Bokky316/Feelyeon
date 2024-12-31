@@ -157,3 +157,14 @@ td button {
     padding: 5px 10px;
     cursor: pointer;
 }
+
+.itemFormBtn {
+    background-color: #FAF6ED;
+    border: none;
+    font-size: 0.9em;
+}
+
+.btn:hover, .itemFormBtn:hover {
+    background-color: #FAF6ED;
+    color: #483A1D;
+}

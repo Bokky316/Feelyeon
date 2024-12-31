@@ -98,7 +98,7 @@
                     <!-- 아이템 활성화/비활성화  -->
                     <button type="button"
                             th:onclick="'toggleItem(' + ${item.id} + ', ' + ${item.active} + ')'">
-                        <span th:text="${item.active} ? '비활성화' : '활성화'"></span>
+                        <span th:text="${item.active} ? '비활성화하기' : '활성화하기'"></span>
                     </button>
                 </td>
             </tr>

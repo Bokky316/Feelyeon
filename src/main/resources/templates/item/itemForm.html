@@ -97,7 +97,7 @@
             <button type="button"
                     th:onclick="'toggleItem(' + ${itemFormDto.id} + ', ' + ${itemFormDto.active} + ')'"
                     class="activeBtn">
-                <span th:text="${itemFormDto.active} ? '비활성화' : '활성화'"></span>
+                <span th:text="${itemFormDto.active} ? '비활성화하기' : '활성화하기'"></span>
             </button>
         </div>
 
