@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/layout1}">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>필연 : 必然 - 상품 목록</title>
+
+    <th:block layout:fragment="css">
+        <link rel="stylesheet" href="/css/header_bg.css">
+        <link rel="stylesheet" href="/css/footer.css">
+        <link rel="stylesheet" href="/css/detail.css">
+        <link rel="icon" href="/static-images/favicon.png" type="image/png">
+        <link href="https://fonts.googleapis.com/css2?family=Nanum+Gothic&family=Playfair+Display:ital,wght@0,400..900;1,400..900&display=swap" rel="stylesheet">
+    </th:block>
+</head>
+<body>
+    <div th:replace="~{fragments/header_bg::header_bg}"></div>
+
+    <main>
+        <div id="itemList">
+        <table border="1">
+            <thead>
+            <tr>
+                <!--<th>홀짝구분</th>-->
+                <th>순번</th>
+                <th>상품 코드</th>
+                <th>상품명</th>
+                <th>가격</th>
+                <th>재고 수량</th>
+                <th>상품 상세 설명</th>
+                <th>상품 판매 상태</th>
+                <th>등록 시간</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="item, status : ${items}">
+                <!--<td th:if="${status.odd}">홀수</td>
+                <td th:if="${status.even}">짝수</td>-->
+                <!--<td th:text="${status.odd} ? '홀수' : '짝수'"></td>-->
+                <!--<td th:if="${status.odd}">홀수</td>
+                <td th:unless="${status.odd}">짝수</td>-->
+                <td th:text="${status.index + 1}"></td>
+                <td th:text="${item.id}"></td>
+                <!-- <td>
+                    <a th:href="@{/view(id=${item.id})}" th:text="${item.itemNm}"></a>
+                </td>-->
+                <td>
+                    <!--경로 변수로 값을 전달할 때는 인코딩 필요 /view/{id}(id=달러{item.id})-->
+                    <a th:href="@{/view/{id}(id=${item.id})}" th:text="${item.itemNm}"></a>
+                </td>
+                <td th:text="${item.price}"></td>
+                <td th:text="${item.stockNumber}"></td>
+                <td th:text="${item.itemDetail}"></td>
+                <td th:text="${item.itemSellStatus}"></td>
+                <td th:text="${#temporals.format(item.regTime, 'yyyy-MM-dd HH:mm:ss')}"></td>
+            </tr>
+            </tbody>
+        </table>
+        </div>
+    </main>
+
+    <div th:replace="~{fragments/footer::footer}"></div>
+
+    <th:block layout:fragment="script">
+        <script src="/js/adminBtn.js"></script>
+
+    </th:block>
+</body>
+</html>

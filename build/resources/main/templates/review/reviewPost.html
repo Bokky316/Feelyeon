@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/layout1}">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>필연 : 必然 - 리뷰 작성</title>
+    <th:block layout:fragment="css">
+    <link href="css/review.css" rel="stylesheet">
+    <link href="css/header_bg.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Nanum+Gothic&family=Playfair+Display:ital,wght@0,400..900;1,400..900&display=swap" rel="stylesheet">
+    </th:block>
+</head>
+<body>
+    <!-- header ver.bg 추후 분리 -->
+    <header>
+        <div class="categories" id="menuToggle"><i class="fas fa-bars"></i></div>
+        <div class="side-menu" id="sideMenu">
+            <ul>
+                <li><a href="index.html">Home</a></li>
+                <li>About</li>
+                <li>Services</li>
+                <li>Contact</li>
+            </ul>
+        </div>
+        <a href="index.html" class="logo"><img th:src="@{/static-images/logo_bg.png}" alt="logo"></a>
+        <div class="nav header-btns">
+            <a href="#">SIGN UP</a>
+            <a href="#">LOGIN</a>
+            <a href="#">CART</a>
+        </div>
+    </header>
+
+    <div class="review-banner">
+        <h2>REVIEW</h2>
+    </div>
+
+    <!--
+        =============== 필독 사항 ===============
+        -   상품 관련 정보 하드코딩 되어있음.   -
+        -   추후 value 속성 사용해서 불러오기   -
+        =========================================
+    -->
+    <!-- 리뷰 작성 폼 -->
+    <div class="review-form-container">
+        <form action="#" method="post" class="review-form">
+            <div class="product-info">
+                <p class="description">상품정보</p>
+                <!-- 여기 부분 클릭시 해당 상품의 상세 페이지로 이동 -->
+                <div class="detail-info">
+                    <a href="상품상세페이지">
+                        <img th:src="@{/static-images/product/014.png}" class="productImg" alt="상품이미지">
+                        <div class="product-info">
+                            <p class="product-name">Carl Angel-5 Royal 3 Pencil Sharpener</p>
+                            <p class="price">75,000원</p>
+                        </div>
+                    </a>
+                </div>
+            </div>
+            
+            <div class="rating-container">
+                <p class="description">만족도</p>
+                <div id="rating" class="star-rating">
+                    <span class="star" data-value="1">☆</span>
+                    <span class="star" data-value="2">☆</span>
+                    <span class="star" data-value="3">☆</span>
+                    <span class="star" data-value="4">☆</span>
+                    <span class="star" data-value="5">☆</span>
+                    <p id="rating-text">실망했어요</p>
+                </div>
+            </div>
+            
+            <div class="input-container">
+                <label for="review-text" class="review-label">리뷰 작성하기</label>
+                <textarea id="review-text" name="review-text" placeholder="솔직한 사용 후기를 남겨주세요 :)" rows="6" required></textarea>
+                <p>상품과 무관한 리뷰는 통보없이 삭제될 수 있습니다.</p>
+            </div>
+
+            <div class="btn-wrap">
+                <button type="submit" class="submit-button">리뷰 등록</button>
+                <button type="button" class="cancel-button">취소</button>
+            </div>
+        </form>
+    </div>
+
+    <footer>
+        <p>
+            &copy; 2024 feelyeon. All rights reserved.<br>
+            상호 ㈜ 필연<br>
+            대표 김연필<br>
+            사업자 등록번호 123-45-6789<br>
+            주소 15494 경기 안산시 상록구 광덕1로 375 강우프라자 5층 이젠컴퓨터아카데미<br>
+            대표전화 010-1234-5678<br>
+            통신판매업 신고 2024-경기안산-01234<br>
+            이메일 feelyeon@ezkb.co.kr<br>
+            COPYRIGHT © 필연 ALL RIGHTS RESERVED. DESIGNED By YUNI
+        </p>
+    </footer>
+
+    <script>
+        // 별점 script
+        const stars = document.querySelectorAll('.star');
+        const ratingText = document.getElementById('rating-text');
+
+        // 별 클릭 시 이벤트 처리
+        stars.forEach(star => {
+            star.addEventListener('click', function() {
+                const value = parseInt(star.getAttribute('data-value'));
+                updateStars(value);
+                updateRatingText(value);
+            });
+        });
+
+        // 별을 업데이트하는 함수
+        function updateStars(value) {
+            stars.forEach(star => {
+                const starValue = parseInt(star.getAttribute('data-value'));
+                if (starValue <= value) {
+                    star.textContent = '★'; // 채워진 별로 표시
+                    star.classList.add('filled'); // 빨간색 별로 채우기
+                } else {
+                    star.textContent = '☆'; // 비어있는 별로 표시
+                    star.classList.remove('filled'); // 비어있는 별로 되돌리기
+                }
+            });
+        }
+
+        // 평점 텍스트
+        function updateRatingText(value) {
+            switch(value) {
+                case 0:
+                    ratingText.textContent = "실망했어요";
+                    break;
+                case 1:
+                    ratingText.textContent = "별로예요";
+                    break;
+                case 2:
+                    ratingText.textContent = "아위숴요";
+                    break;
+                case 3:
+                    ratingText.textContent = "보통이에요";
+                    break;
+                case 4:
+                    ratingText.textContent = "만족해요";
+                    break;
+                case 5:
+                    ratingText.textContent = "매우 만족해요";
+                    break;
+            }
+        }
+
+        // 제일 끝 별을 클릭하면 5개 다 채우는 기능 추가
+        const lastStar = stars[4]; // 마지막 별
+
+        lastStar.addEventListener('click', function() {
+            const currentRating = stars.filter(star => star.classList.contains('filled')).length;
+            if (currentRating === 0) {
+                updateStars(5); // 제일 끝 별을 클릭하면 5개 다 채운다.
+                updateRatingText(5);
+            }
+        });
+
+        document.addEventListener("DOMContentLoaded", function () {
+            // header script
+            // menu slider
+            const sideMenu = document.getElementById('sideMenu');
+            const menuToggle = document.getElementById('menuToggle');
+
+            function toggleMenu() {
+                sideMenu.classList.toggle('open');
+            }
+
+            menuToggle.addEventListener('click', toggleMenu);
+
+            document.addEventListener('click', function(event) {
+                if (!sideMenu.contains(event.target) && !menuToggle.contains(event.target)) {
+                    sideMenu.classList.remove('open');
+                }
+            });
+        });
+    </script>
+</body>
+</html>

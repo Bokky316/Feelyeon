@@ -1,0 +1,104 @@
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    width: 100%;
+    background-color: #FAF6ED;
+}
+
+.login-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    background-color: #faf6ed;
+    color: #fff;
+}
+
+.login-content {
+    width: 400px;
+    background-color: #fefcf9;
+    padding: 40px;
+    border-radius: 10px;
+    box-shadow: 0 3px 10px rgba(0, 0, 0, 0.2);
+    text-align: center;
+}
+
+.login-content h2 {
+    font-family: "Playfair Display", serif;
+    font-size: 2.5em;
+    color: black;
+    margin-bottom: 50px;
+}
+
+.login-form {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.input-group {
+    display: flex;
+    align-items: flex-start;
+    background-color: #ddd8cd;
+    border-radius: 5px;
+}
+
+.input-group label {
+    font-size: 1.1em;
+    color: rgb(54, 54, 54);
+    cursor: pointer;
+}
+
+.input-group i {
+    padding: 10px;
+    margin-left: 5px;
+}
+
+.input-group input {
+    width: 70%;
+    padding: 10px;
+    background-color: #ddd8cd;
+    border: none;
+    color: rgb(54, 54, 54);
+    font-size: 1em;
+    cursor: pointer;
+}
+
+.input-group input:focus {
+    outline: none;
+}
+
+.login-btn {
+    background-color: #000000;
+    color: white;
+    font-size: 1.1em;
+    padding: 10px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.signup-link {
+    color: #595750;
+    font-size: 0.95em;
+    text-decoration: none;
+    margin-top: 20px;
+    transition: color 0.3s ease;
+}
+
+.signup-link:hover {
+    color: black;
+}
+
+.social-login img {
+    width: 100%;
+}
+
+/* 폼 오류 CSS */
+.fieldError {
+    color: #bd2130;
+}
+.error {
+    color: #bd2130;
+}

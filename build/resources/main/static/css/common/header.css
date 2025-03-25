@@ -1,0 +1,159 @@
+/* 최상단 */
+.event-area {
+    text-align: center;
+    background-color: #E0D3AE;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 40px;
+    z-index: 999;
+    overflow: hidden;
+}
+
+.container {
+    position: relative;
+    text-align: center;
+    width: 100%;
+    height: 100px;
+    overflow: hidden;
+}
+
+.text {
+    position: absolute;
+    padding: 8px;
+    width: 100%;
+    font-size: 18px;
+    color: #333;
+    opacity: 0;
+    transform: translateY(50px);
+    animation: slideUpFadeInOut 10s ease-in-out infinite;
+}
+
+#text1 {
+    animation-delay: 0s;
+}
+
+#text2 {
+    animation-delay: 5s;
+}
+
+/* 최상단 텍스트 애니메이션 효과 */
+@keyframes slideUpFadeInOut {
+    0% {
+        opacity: 0;
+        transform: translateY(50px);
+    }
+    25% {
+        opacity: 1;
+        transform: translateY(0);
+    }
+    50% {
+        opacity: 1;
+        transform: translateY(0);
+    }
+    75% {
+        opacity: 0;
+        transform: translateY(-50px);
+    }
+    100% {
+        opacity: 0;
+        transform: translateY(-50px);
+    }
+}
+
+/* nav 스타일 */
+nav {
+    background-color: #000000;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 20px;
+    position: fixed;
+    top: 40px;
+    left: 0;
+    right: 0;
+    z-index: 999;
+    height: 35px;
+}
+
+/* 좌측 메뉴 슬라이드 스타일 */
+.categories {
+    font-size: 30px;
+    color: white;
+    cursor: pointer;
+}
+
+.categories i {
+    margin-left: 7px;
+    -webkit-text-stroke: 1px black;
+    color: white;
+}
+
+.categories i:hover {
+    color: #cacaca;
+}
+
+.side-menu {
+    position: fixed;
+    top: 0;
+    left: -250px;
+    width: 250px;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.95);
+    color: #ccc;
+    transition: transform 0.3s ease;
+    z-index: 1000;
+}
+
+.side-menu ul {
+    list-style: none;
+    padding: 20px;
+}
+
+.side-menu ul li {
+    margin: 15px 0;
+}
+
+.side-menu ul li a {
+    text-decoration: none;
+    color: #FAF6ED;
+    margin-left: 15px;
+}
+
+.side-menu.open {
+    transform: translateX(250px);
+    z-index: 1000;
+}
+
+.nav a {
+    color: white;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+nav .logo {
+    position: absolute;
+    left: 50%; 
+    transform: translateX(-50%);
+}
+
+nav .logo img {
+    max-width: 150px;
+    height: auto;
+    padding-top: 4px;
+}
+
+.nav.header-btns a {
+    color: white;
+    text-decoration: none;
+    margin-right: 30px;
+}
+
+.nav.header-btns a:last-child {
+    margin-right: 15px;
+}
+
+.nav.header-btns a:hover {
+    color: #cacaca;
+}

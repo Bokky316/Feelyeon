@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/layout1}">
+
+  <th:block layout:fragment="css">
+    <link rel="stylesheet" href="/css/content01.css">
+  </th:block>
+
+  <div layout:fragment="content">
+    <!-- 1. layout:decorate="~{layouts/layout1}" : layout1.html 파일을 레이아웃으로 사용한다.
+            - ~{layouts : templates/layouts 디렉토리
+            - 뒤에 있는 layout1 : layout1.html 파일
+         2. div layout:fragment="content" : layout1.html 파일의 content 영역에 여기의 내용을 삽입하겠다.
+    -->
+      <h1>컨텐츠 페이지</h1>
+      <p id="test-paragraph">이 문장은 JavaScript로 스타일이 변경됩니다.</p>
+      <button class="custom-button" id="test-button">클릭하세요</button>
+  </div>
+
+    <th:block layout:fragment="script">
+      <script src="/js/content01.js"></script>
+    </th:block>
+</html>
